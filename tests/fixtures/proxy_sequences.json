@@ -1,0 +1,2585 @@
+[
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF5700",
+      "FFFFFF",
+      "FF5700"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Valentines/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FFFFFF",
+      "FF0000",
+      "FC00FF",
+      "FC00FF",
+      "FC00FF"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 100
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "00FF40",
+      "00FF40",
+      "00FF00"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 100
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FD12FF",
+      "F8FF1F",
+      "FF0040",
+      "59FF76",
+      "2949FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "400425",
+      "FF0F98",
+      "400425",
+      "7C00FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0000FF",
+      "0000CC",
+      "000099",
+      "000066",
+      "000033",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 100
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0000FF",
+      "FF0000",
+      "FFFFFF",
+      "FF0000",
+      "0000FF",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 100
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Halloween/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF2900",
+      "FF2900",
+      "7300FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/",
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "00FF00"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF8618",
+      "FF4B00",
+      "990000",
+      "FF4B00"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Christmas/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FFFFFF",
+      "FF0000"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Christmas/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FF0000",
+      "00FF00",
+      "00FF00",
+      "00FF00",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Christmas/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "00FF00"
+    ],
+    "effects": [
+      {
+        "effectType": "blink",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Winter Magic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0000FF",
+      "00FFFF",
+      "00FF5F",
+      "FFFFFF"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 18
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Winter Magic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FF0000",
+      "323232",
+      "3A3A3A"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0A00",
+      "FF1400",
+      "FF1D00",
+      "FF2800",
+      "FF3200",
+      "FF3C00",
+      "FF4600",
+      "FF5000",
+      "FF5A00",
+      "FF6400",
+      "FF6E00",
+      "FF7800",
+      "FF8200",
+      "FF8C00",
+      "FF9600",
+      "FF8C00",
+      "FF8200",
+      "FF7800",
+      "FF6E00",
+      "FF6400",
+      "FF5A00",
+      "FF5000",
+      "FF4600",
+      "FF3C00",
+      "FF3200",
+      "FF2800",
+      "FF1E00",
+      "FF1400",
+      "FF0A00",
+      "FF0000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 194
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Valentines/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FF0079",
+      "FF0079",
+      "5D5D5D",
+      "FF0079",
+      "FF0079",
+      "FF0000"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Halloween/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF2700",
+      "FF2600",
+      "FF2600",
+      "FF2500",
+      "6A00FF",
+      "6900FF",
+      "6800FF",
+      "00FF00",
+      "00FF00",
+      "6800FF",
+      "6800FF",
+      "6800FF",
+      "FF2500",
+      "FF2500",
+      "FF2500"
+    ],
+    "effects": [
+      {
+        "effectType": "fade",
+        "value": 64
+      },
+      {
+        "effectType": "reverseChase",
+        "value": 28
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FF0000",
+      "FF0000",
+      "FF0000",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0000FF"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 95
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Celebrations/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "880089",
+      "FFB001",
+      "128001"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 171
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FFFFFF",
+      "0000FF",
+      "0000FF"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "00FF00",
+      "FFFFFF"
+    ],
+    "effects": [
+      {
+        "effectType": "strobe",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Celebrations/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FFFFFF",
+      "FF0000",
+      "00FF00",
+      "FFFFFF",
+      "0000FF",
+      "FFFF00",
+      "FFFFFF",
+      "FF00FF",
+      "00FFFF"
+    ],
+    "effects": [
+      {
+        "effectType": "blink",
+        "value": 216
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Halloween/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "F75D1A",
+      "F75D1A",
+      "FF9A00",
+      "FF9A00",
+      "000000",
+      "000000",
+      "871DE4",
+      "871DE4",
+      "84E21E",
+      "83E21D"
+    ],
+    "effects": [
+      {
+        "effectType": "fade",
+        "value": 127
+      },
+      {
+        "effectType": "reverseChase",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Celebrations/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0085C7",
+      "F4C300",
+      "000000",
+      "009F3D",
+      "DF0024"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FFFFFF",
+      "C8C8C8",
+      "969696",
+      "646464",
+      "323232",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "320000",
+      "640000",
+      "960000",
+      "C80000",
+      "FF0000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "323232",
+      "646464",
+      "969696",
+      "C8C8C8",
+      "FFFFFF",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000032",
+      "000064",
+      "000096",
+      "0000C8",
+      "0000FF",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Celebrations/",
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF4500",
+      "FFA900",
+      "FFFF00",
+      "C0FF00",
+      "5CFF00",
+      "00FF00",
+      "00FF49",
+      "00FFB8",
+      "00FFFF",
+      "00BAFF",
+      "005FFF",
+      "0000FF",
+      "4400FF",
+      "C000FF",
+      "FF00FF",
+      "FF00AD",
+      "FF005E",
+      "FF005E"
+    ],
+    "effects": [
+      {
+        "effectType": "blink",
+        "value": 255
+      },
+      {
+        "effectType": "chase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Winter Magic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0042FF",
+      "009BFF",
+      "00FFD1",
+      "009CA3",
+      "0042FF"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0042FF",
+      "009BFF",
+      "00FFD1",
+      "009CA3",
+      "0042FF",
+      "00CD8F",
+      "0050BD",
+      "00404E",
+      "004128",
+      "00002A",
+      "001218",
+      "000000",
+      "000000",
+      "220000",
+      "461F00",
+      "533B00",
+      "5F8200",
+      "AB5A00",
+      "927800",
+      "C55200",
+      "FF9C00",
+      "FF4200",
+      "FFFF00",
+      "FF9C00",
+      "FF4100",
+      "D46E00",
+      "86B400",
+      "6D6F00",
+      "420000",
+      "231C00",
+      "100200",
+      "000000",
+      "000000",
+      "00070D",
+      "001C11",
+      "000E43",
+      "004A54",
+      "007668",
+      "0095BA",
+      "009BFF",
+      "00FFD1",
+      "009CA3",
+      "0042FF",
+      "009BFF",
+      "00FFD0"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FEFFFF",
+      "E0C3BB",
+      "C59A83",
+      "AB7B58",
+      "936039",
+      "7A4419",
+      "68340E",
+      "552300",
+      "3D1600",
+      "280E00",
+      "0F0500",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "141414",
+      "141414",
+      "141414",
+      "141414",
+      "141414",
+      "371313",
+      "691414",
+      "9B1414",
+      "CD1414",
+      "FF1414",
+      "141414",
+      "141414",
+      "141414",
+      "141414",
+      "141414",
+      "143714",
+      "146914",
+      "149B14",
+      "14CD14",
+      "14FF14",
+      "141414",
+      "141414",
+      "141414",
+      "141414",
+      "141414",
+      "121237",
+      "111169",
+      "12129B",
+      "1414CD",
+      "1414FF"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF3E74"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF44EA",
+      "FF44EA",
+      "FF44EA",
+      "01FF8E",
+      "01FF8E"
+    ],
+    "effects": [
+      {
+        "effectType": "fade",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "E60000",
+      "CF0000",
+      "B90000",
+      "A70000",
+      "960000",
+      "870000",
+      "7A0000",
+      "6E0000",
+      "630000",
+      "590000",
+      "500000",
+      "480000",
+      "410000",
+      "3A0000",
+      "340000",
+      "2F0000",
+      "2A0000",
+      "260000",
+      "220000",
+      "1F0000",
+      "1C0000",
+      "190000",
+      "160000",
+      "140000",
+      "120000",
+      "100000",
+      "0F0000",
+      "0D0000",
+      "0C0000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "0000FF",
+      "0000E6",
+      "0000CE",
+      "0000BA",
+      "0000A7",
+      "000097",
+      "000087",
+      "00007A",
+      "00006E",
+      "000063",
+      "000059",
+      "000050",
+      "000048",
+      "000041",
+      "00003A",
+      "000034",
+      "00002F",
+      "00002A",
+      "000026",
+      "000022",
+      "00001F",
+      "00001C",
+      "000019",
+      "000016",
+      "000014",
+      "000012",
+      "000010",
+      "00000E",
+      "00000D",
+      "00000C",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "000000",
+      "000000",
+      "00FF00",
+      "00FF00",
+      "000000",
+      "000000"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FF0000",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "3E1CFE",
+      "FE06FF",
+      "FFFFFF",
+      "FD6502",
+      "FF0000",
+      "FFFF00"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "6104FF",
+      "6104FF",
+      "6104FF",
+      "6104FF",
+      "6104FF",
+      "FDEF03",
+      "FDEF03",
+      "FDEF03",
+      "FDEF03",
+      "FDEF03"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "FF0000",
+      "FFFF00",
+      "FFFF00",
+      "0000FF",
+      "0000FF",
+      "00FF00",
+      "00FF00"
+    ],
+    "effects": [
+      {
+        "effectType": "random",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "1E1E1E",
+      "1E1E1E",
+      "1E1E1E"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 158
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "0000FF"
+    ],
+    "effects": [
+      {
+        "effectType": "wipe",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF0000",
+      "000000",
+      "00FF00"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF000A",
+      "FF000A",
+      "FFF700",
+      "FFF700",
+      "00FF0A",
+      "00FF0A",
+      "FF00FF",
+      "FF00FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "D3CC37",
+      "B09032",
+      "FF9802",
+      "FF7401",
+      "FE6700",
+      "FF6800",
+      "FE4400",
+      "FF9601",
+      "FE8B09",
+      "FE4400",
+      "FE4400"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "C8C8C8",
+      "6AA09B",
+      "FEEABF",
+      "C1AC8D",
+      "99FFCF",
+      "FFFBA1",
+      "A7A7B0",
+      "DAA7FF",
+      "5F5D64",
+      "FDE5B6",
+      "847F98",
+      "8DF4FF",
+      "FEE2BE"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Winter Magic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FDF2EC",
+      "C5DBEC",
+      "C4F2EC",
+      "A7F2EC",
+      "A0F2EC",
+      "60F2EC",
+      "5AF2EC",
+      "60F2EC",
+      "36F2EC",
+      "0FF2EC",
+      "00F2EC",
+      "02D1EC",
+      "00CAEC",
+      "00C7EC",
+      "00A7EC",
+      "0091EC",
+      "006CEC",
+      "0070EC",
+      "0059EC",
+      "0049EC",
+      "0044EC",
+      "0031EC",
+      "0014EC",
+      "0027EC",
+      "0067EC",
+      "0083EC",
+      "00B2EC",
+      "00C1EC",
+      "20D1EC",
+      "58D7EC",
+      "73D6EC",
+      "95D6EC",
+      "B9D6EC",
+      "BBD6EC",
+      "D2D6EC"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 225
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Winter Magic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "01EEFE",
+      "03FCFF",
+      "FE89FE",
+      "FB80FE",
+      "FEFDF7",
+      "FEFDF7"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 127
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF80FD"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "0000FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF3C00"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "00E1FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "C8C8C8"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "00FF87"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FF240F",
+      "FF460F",
+      "FF670F",
+      "FF980F",
+      "FFC50F",
+      "FFDE0F",
+      "EEFF0F",
+      "BBFF0F",
+      "93FF0F",
+      "4BFF0F",
+      "0FFF11",
+      "0FFF3E",
+      "0FFF6F",
+      "0FFF9E",
+      "0FFFD8",
+      "0FE4FF",
+      "0FA4FF",
+      "0F5CFF",
+      "1B0FFF",
+      "6D0FFF",
+      "C80FFF",
+      "FF0FEC",
+      "FF0F9A",
+      "FF0F43",
+      "FF0F43"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "none",
+    "pattern": [
+      "FFC65B"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0096FF",
+      "0096FF",
+      "0096FF",
+      "0096FF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0000FF",
+      "0096FF",
+      "0096FF",
+      "0096FF",
+      "0096FF",
+      "FAFAFA",
+      "FAFAFA",
+      "FF0805",
+      "FF0805",
+      "FAFAFA",
+      "FAFAFA",
+      "FF0805",
+      "FF0805",
+      "FAFAFA",
+      "FAFAFA",
+      "FF0805",
+      "FF0805"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 50
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FFC65B",
+      "FFC65B",
+      "000AFF",
+      "000AFF",
+      "FF0004",
+      "FF0004"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF0004",
+      "FF0004",
+      "FF0004",
+      "FF0004",
+      "0004FF",
+      "0004FF",
+      "0004FF",
+      "0004FF",
+      "0004FF",
+      "0004FF",
+      "0004FF",
+      "000000",
+      "000000",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "FFFFFF",
+      "0055FF",
+      "0055FF",
+      "0055FF",
+      "0055FF"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Patriotic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "3C3B6E",
+      "5E6EAF",
+      "D2DDEC",
+      "E8EBF1",
+      "700000"
+    ],
+    "effects": [
+      {
+        "effectType": "gradient",
+        "value": 25
+      },
+      {
+        "effectType": "chase",
+        "value": 24
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Valentines/",
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF01BE",
+      "FF01BE",
+      "FF62B7",
+      "FF62B7",
+      "FF0148",
+      "FF0148"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 109
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FEC800",
+      "FE8100",
+      "FE4206",
+      "FF0503",
+      "D40486",
+      "EE04EE",
+      "C803C8",
+      "990399",
+      "650165",
+      "3A013A",
+      "300030",
+      "000000",
+      "000000",
+      "373200",
+      "776C00",
+      "B5A701",
+      "DCCC00",
+      "FFEA02"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF43FD",
+      "FF5BA0",
+      "FF685B",
+      "FF8059",
+      "FF964F",
+      "FFB644",
+      "FED44E",
+      "FFF15D",
+      "FDF8E1"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 123
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Halloween/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "7200FF"
+    ],
+    "effects": [
+      {
+        "effectType": "fade",
+        "value": 50
+      },
+      {
+        "effectType": "lightning",
+        "value": 255
+      },
+      {
+        "effectType": "twinkle",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Halloween/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "330A00",
+      "6D1500",
+      "A42000",
+      "CE2900",
+      "FE3301",
+      "CE2900",
+      "A42000",
+      "6D1500",
+      "330A00",
+      "2C002B",
+      "570057",
+      "870187",
+      "940193",
+      "B502B4",
+      "940193",
+      "870187",
+      "570057",
+      "2C002B",
+      "001B00",
+      "003300",
+      "005300",
+      "007000",
+      "018700",
+      "007000",
+      "005300",
+      "003300",
+      "001B00"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Christmas/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FE940D",
+      "FFE702",
+      "02FF01",
+      "3E18FF",
+      "FE1703",
+      "FE9A01"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Christmas/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FFFFFF",
+      "FF4989",
+      "FF0221"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF9602",
+      "FE2E02",
+      "FF0000"
+    ],
+    "effects": [
+      {
+        "effectType": "bars",
+        "value": 112
+      },
+      {
+        "effectType": "chase",
+        "value": 195
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "02FD7B",
+      "84FCAD",
+      "02FF01",
+      "DDFFF5",
+      "94FF2C",
+      "01FF40",
+      "01703F",
+      "02FEB0",
+      "E0F3FF"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "0FFD98",
+      "0FFD98",
+      "BDC3FE",
+      "BDC3FE",
+      "00B0FE",
+      "00B0FE"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 110
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FD8782",
+      "FF554B",
+      "FF1114",
+      "FF0585",
+      "FE625A",
+      "FF6302",
+      "FD9763",
+      "FFD8B5"
+    ],
+    "effects": [
+      {
+        "effectType": "gradient",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "02FE03",
+      "03FFF3",
+      "032CFF",
+      "49018C",
+      "D27DFF",
+      "026700"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 116
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF1B94",
+      "FB5905",
+      "FDD401"
+    ],
+    "effects": [
+      {
+        "effectType": "wipe",
+        "value": 119
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FE674A",
+      "FE674A",
+      "FE674A",
+      "FE674A",
+      "FF3B37",
+      "FF3B37",
+      "FF3B37",
+      "FF3B37"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 128
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Everyday/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FFFCF1",
+      "CAFFF9",
+      "8CFEEC",
+      "00FECB",
+      "00D3FD",
+      "0187FE",
+      "3E1EFF",
+      "6C03FF",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Celebrations/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF0000",
+      "FF4500",
+      "FFA900",
+      "FFFF00",
+      "C0FF00",
+      "5CFF00",
+      "00FF00",
+      "00FF49",
+      "00FFB8",
+      "00FFFF",
+      "00BAFF",
+      "005FFF",
+      "0000FF",
+      "4400FF",
+      "C000FF",
+      "FF00FF",
+      "FF00AD",
+      "FF005E",
+      "FF005E"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 148
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Celebrations/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "3D6BFF",
+      "9100BC",
+      "FE0086",
+      "CF8DFF",
+      "043FFF",
+      "FF8BD6"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 118
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Winter Magic/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "1B01FF",
+      "01A6FF",
+      "6A01FF",
+      "01D7FF"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 119
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF7302",
+      "FF7302",
+      "FF7302",
+      "FF6002",
+      "FF6002",
+      "FF6002",
+      "FF6002"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 232
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FD6B1B",
+      "FD6B1B",
+      "FD6B1B",
+      "FE3900"
+    ],
+    "effects": [
+      {
+        "effectType": "pingPong",
+        "value": 50
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF2503",
+      "FD8273",
+      "FF2503",
+      "FF2503",
+      "FF2503",
+      "FF2503"
+    ],
+    "effects": [
+      {
+        "effectType": "pingPong",
+        "value": 50
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "01FD00",
+      "85FC00",
+      "E1FF8C"
+    ],
+    "effects": [
+      {
+        "effectType": "pingPong",
+        "value": 117
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FD8782",
+      "FF4F5B",
+      "FF1114",
+      "FF1114",
+      "FF1138",
+      "FF1138"
+    ],
+    "effects": [
+      {
+        "effectType": "melt",
+        "value": 254
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Fall Fun/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FE4703",
+      "FD8047",
+      "FF6601",
+      "FD6033",
+      "FF3531"
+    ],
+    "effects": [
+      {
+        "effectType": "twinkle",
+        "value": 157
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Halloween/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "B304FF",
+      "DA04FF",
+      "FF04DB",
+      "3504FF",
+      "041DFF",
+      "0463FF",
+      "04FF23",
+      "5AFF04"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 23
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Christmas/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF0000",
+      "770000",
+      "000000",
+      "00FF00",
+      "007500",
+      "000000",
+      "FFFFFF",
+      "7D7F81",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "melt",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "15FF58",
+      "15FF58",
+      "89FFAD",
+      "ADFFE2",
+      "C3EBFF",
+      "E098FF",
+      "DE76FF",
+      "D01FFF",
+      "D01FFF",
+      "FF65D3",
+      "FF6A8F",
+      "FF6995",
+      "FF865E",
+      "FF9B00",
+      "FF9B00",
+      "FF9B00",
+      "BCD178",
+      "C4E473",
+      "BAFF6C",
+      "97FF84",
+      "15FF58"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 255
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Other Holidays/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FFFFFF",
+      "02FF01",
+      "B5FE88"
+    ],
+    "effects": [
+      {
+        "effectType": "bars",
+        "value": 37
+      },
+      {
+        "effectType": "chase",
+        "value": 74
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF0803",
+      "FF0803",
+      "000000",
+      "FF0803",
+      "FF0803",
+      "0008FF",
+      "FF0800",
+      "FF0800",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 50
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF0000",
+      "0000FF"
+    ],
+    "effects": [
+      {
+        "effectType": "bars",
+        "value": 94
+      },
+      {
+        "effectType": "pingPong",
+        "value": 218
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FE0D0A",
+      "FE0D0A",
+      "009FFD",
+      "009FFD",
+      "00FF2C",
+      "00FF2C",
+      "F607F5",
+      "F607F5"
+    ],
+    "effects": [
+      {
+        "effectType": "fade",
+        "value": 206
+      },
+      {
+        "effectType": "chase",
+        "value": 221
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FFFFFF",
+      "FFE26E",
+      "9F7E01",
+      "0086FC",
+      "02FE03"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 102
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF01BE",
+      "FF01BE",
+      "FF62B7",
+      "FF62B7",
+      "FF0148",
+      "FF0148"
+    ],
+    "effects": [
+      {
+        "effectType": "chase",
+        "value": 109
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FFB213",
+      "FFB904",
+      "FFC301",
+      "C49C19",
+      "A07F13",
+      "715A0E",
+      "493A09",
+      "1A1503",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "000000",
+      "0112FD",
+      "000000",
+      "000000",
+      "000000",
+      "2720FF",
+      "000000",
+      "000000",
+      "000000"
+    ],
+    "effects": [
+      {
+        "effectType": "reverseChase",
+        "value": 176
+      }
+    ],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Pop Culture/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "6A0700",
+      "02FF01",
+      "892C00",
+      "0700CA",
+      "9B8200"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "groups": [
+      "EverLights/Cancer Awareness/"
+    ],
+    "alias": "<redacted str>",
+    "colorMode": "rgb",
+    "pattern": [
+      "FF037D"
+    ],
+    "effects": [],
+    "lastChanged": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "0000FF"
+    ],
+    "colorMode": "rGB",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "FFFFFF",
+      "FF0000",
+      "0000FF"
+    ],
+    "colorMode": "rgb",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "FF0000",
+      "00FF00"
+    ],
+    "colorMode": "rgb",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "0000FF"
+    ],
+    "colorMode": "rgb",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "FFFFFF",
+      "FF0000",
+      "0000FF"
+    ],
+    "colorMode": "rGB",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "FF0000",
+      "00FF00"
+    ],
+    "colorMode": "rgb",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "0000FF"
+    ],
+    "colorMode": "rGB",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "<redacted str>",
+    "alias": "<redacted str>",
+    "groups": [
+      "Personal/"
+    ],
+    "effects": [],
+    "pattern": [
+      "FFFFFF",
+      "FF0000",
+      "0000FF"
+    ],
+    "colorMode": "rGB",
+    "lastChanged": "2024-01-01T00:00:00.000Z"
+  }
+]

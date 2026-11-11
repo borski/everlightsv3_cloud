@@ -1,0 +1,6 @@
+{
+  "token_type": "<redacted str>",
+  "refresh_token": "<redacted str>",
+  "access_token": "<redacted str>",
+  "expires_in": 86400
+}

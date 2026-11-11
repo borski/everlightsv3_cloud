@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Everlights account",
+        "description": "Sign in with the same email and password you use in the Everlights app. Home Assistant talks to your bridge through the Everlights cloud, because bridge firmware B5010 and newer no longer allow local control.",
+        "data": {
+          "username": "Email",
+          "password": "Password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Sign in to Everlights again",
+        "description": "Everlights rejected the saved password for {username}.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This Everlights account is already set up.",
+      "reauth_successful": "Signed in again."
+    },
+    "error": {
+      "invalid_auth": "Everlights rejected that email or password.",
+      "cannot_connect": "Could not reach the Everlights cloud.",
+      "no_bridges": "This account has no Everlights bridge paired to it.",
+      "unknown": "Unexpected error. Check the Home Assistant log."
+    }
+  }
+}

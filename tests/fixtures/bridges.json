@@ -1,0 +1,34 @@
+[
+  {
+    "id": "<redacted int>",
+    "pairedDate": "2024-01-01T00:00:00.000Z",
+    "bridgeSerial": "serial-01",
+    "accountId": "<redacted int>",
+    "alias": "<redacted str>",
+    "unpairedDate": null,
+    "bridge": {
+      "serial": "serial-01",
+      "registeredDate": "2024-01-01T00:00:00.000Z",
+      "hardwareVersion": "BH300",
+      "firmwareVersion": "B5010",
+      "lastFirmwareUpdate": "2024-01-01T00:00:00.000Z",
+      "radioFirmwareVersion": "R3051",
+      "radioLoopsPerSecond": 920,
+      "lastRadioFirmwareUpdate": "2024-01-01T00:00:00.000Z",
+      "firstCheckinDate": "2024-01-01T00:00:00.000Z",
+      "lastCheckinDate": "2026-11-11T06:53:57.322Z",
+      "lastActiveDate": "2024-01-01T00:00:00.000Z",
+      "rebootCount": 1,
+      "lastRebootDate": "2024-01-01T00:00:00.000Z",
+      "lastHeartbeatDelay": 1,
+      "publicIp": "<redacted str>",
+      "localIp": "<redacted ip>",
+      "ssid": null,
+      "location": [
+        "<redacted float>",
+        "<redacted float>"
+      ],
+      "timeOffset": null
+    }
+  }
+]
