@@ -123,13 +123,13 @@ Tested on bridge hardware BH300 with firmware B5010 and zone firmware N3063.
 |---|---|
 | Reading zones, sequences, schedule, and clock | Tested |
 | Solid colour, off, and clear | Tested |
-| Saving and deleting a sequence | Tested |
+| Saving, updating, and deleting a sequence | Tested |
+| Scheduling a show, dropping a night, and deleting a show | Tested |
+| Sync clock and restart | Tested |
 | Effects and multi colour patterns | Same call as a solid colour. Less live testing |
-| Updating a sequence | Not yet tested live |
-| Scheduling, changing, and deleting shows | Not yet tested live |
-| Sync clock and restart | Not yet tested live |
+| A scheduled show actually running at its time | Not yet tested live |
 
-The untested ones follow the bridge's old local API, which the cloud tunnel mirrors for everything tested so far. All of them are covered by the test suite against a fake bridge. Please open an issue if one misbehaves.
+A restart took about 20 seconds before the bridge answered again. Please open an issue if anything misbehaves.
 
 ## Development
 

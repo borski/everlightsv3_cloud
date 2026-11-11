@@ -436,23 +436,23 @@ class EverlightsCloudClient:
     async def async_update_sequence(
         self, bridge: str, sequence_id: str, sequence: dict[str, Any]
     ) -> Any:
-        """Replace a saved sequence. The old local API answered 200."""
+        """Replace a saved sequence. Verified on B5010: answers 200."""
         return await self._async_write(
             "PUT", bridge, f"proxy/v1/sequences/{sequence_id}", json_body=sequence
         )
 
     async def async_create_event(self, bridge: str, event: dict[str, Any]) -> Any:
-        """Schedule a show. The old local API answered 201."""
+        """Schedule a show. Verified on B5010: answers 201."""
         return await self._async_write("POST", bridge, "proxy/v1/events", json_body=event)
 
     async def async_update_event(self, bridge: str, event_id: str, event: dict[str, Any]) -> Any:
-        """Replace a scheduled show. The old local API answered 200."""
+        """Replace a scheduled show. Verified on B5010: answers 200."""
         return await self._async_write(
             "PUT", bridge, f"proxy/v1/events/{event_id}", json_body=event
         )
 
     async def async_delete_event(self, bridge: str, event_id: str) -> None:
-        """Remove a scheduled show. The old local API answered 204."""
+        """Remove a scheduled show. Verified on B5010: answers 204."""
         await self._async_write("DELETE", bridge, f"proxy/v1/events/{event_id}")
 
     async def async_set_time(self, bridge: str, when: str) -> Any:
