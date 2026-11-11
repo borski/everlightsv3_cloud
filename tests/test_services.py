@@ -322,3 +322,52 @@ async def test_local_naive_times_use_the_ha_zone(hass, setup_entry, cloud):
     times = {"start": datetime(2026, 12, 1, 17), "end": datetime(2026, 12, 1, 23)}
     await call(hass, "schedule_show", CALENDAR, **{**SHOW, **times})
     assert cloud.events[0]["occurrences"][0]["end"] == "2026-12-02T07:00:00.000000Z"
+
+
+async def test_update_show_in_place(hass, setup_entry, cloud):
+    await call(hass, "schedule_show", CALENDAR, **SHOW, nights=3, start_at_dusk=True)
+    event_id = cloud.events[0]["id"]
+    await call(
+        hass, "update_show", CALENDAR, name="holiday", new_name="Winter",
+        sequences=[OWN], lights=[LIGHT], end_at_dawn=True,
+    )
+    (event,) = cloud.events
+    assert event["id"] == event_id and event["alias"] == "Winter"
+    assert event["sequences"] == [{"sequenceId": "seq-098", "duration": 20}]
+    assert event["zoneSerials"] == [GARAGE]
+    # Dusk was left alone, dawn was added, and the nights did not move.
+    assert event["flags"] == ["StartAtDusk", "EndAtDawn"] and len(event["occurrences"]) == 3
+    assert writes(cloud, "events")[-1] == ("PUT", "events")
+
+    # Moving it keeps the number of nights unless told otherwise.
+    await call(hass, "update_show", CALENDAR, name="Winter",
+               start="2026-12-10 18:00:00", end="2026-12-11 01:00:00", start_at_dusk=False)
+    event = cloud.events[0]
+    assert len(event["occurrences"]) == 3 and event["flags"] == ["EndAtDawn"]
+    assert event["occurrences"][0] == {
+        "start": "2026-12-11T02:00:00.000000Z", "end": "2026-12-11T09:00:00.000000Z"
+    }
+    await call(hass, "update_show", CALENDAR, name="Winter",
+               start="2026-12-10 18:00:00", end="2026-12-11 01:00:00", nights=1)
+    assert len(cloud.events[0]["occurrences"]) == 1
+
+
+async def test_update_show_refusals(hass, setup_entry, cloud):
+    await call(hass, "schedule_show", CALENDAR, **SHOW)
+    sent = len(writes(cloud, "events"))
+    for match, data in (
+        ("No show", {"name": "Other", "new_name": "X"}),
+        ("Nothing to change", {"name": "Holiday"}),
+        ("Nothing to change", {"name": "Holiday", "new_name": "Holiday", "start_at_dusk": False}),
+        ("both a start and an end", {"name": "Holiday", "start": "2026-12-10 18:00:00"}),
+        ("along with the number of nights", {"name": "Holiday", "nights": 4}),
+        ("No sequence", {"name": "Holiday", "sequences": ["Nope"]}),
+        ("after the start", {"name": "Holiday", "start": SHOW["end"], "end": SHOW["start"]}),
+    ):
+        with pytest.raises(ServiceValidationError, match=match):
+            await call(hass, "update_show", CALENDAR, **data)
+    assert len(writes(cloud, "events")) == sent
+    cloud.ignore_writes = True
+    with pytest.raises(HomeAssistantError, match="did not keep"):
+        await call(hass, "update_show", CALENDAR, name="Holiday", new_name="Winter")
+    assert len(writes(cloud, "events")) == sent + 1

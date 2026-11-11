@@ -19,7 +19,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, SERVICE_DELETE_SHOW, SERVICE_SCHEDULE_SHOW
+from .const import DOMAIN, SERVICE_DELETE_SHOW, SERVICE_SCHEDULE_SHOW, SERVICE_UPDATE_SHOW
 from .coordinator import EverlightsCloudConfigEntry
 from .entity import EverlightsCloudBridgeEntity
 from .schedule import ALL_ZONES, MAX_OCCURRENCES, expand
@@ -41,18 +41,35 @@ async def async_setup_entry(
         for serial in coordinator.data["bridges"]
     )
 
+    sequences = vol.Any(
+        vol.All(cv.ensure_list, [cv.string], vol.Length(min=1)),
+        vol.All({cv.string: vol.All(vol.Coerce(int), vol.Range(1, 86400))}, vol.Length(min=1)),
+    )
+    nights = vol.All(vol.Coerce(int), vol.Range(1, MAX_OCCURRENCES))
     platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service(
+        SERVICE_UPDATE_SHOW,
+        {
+            vol.Required("name"): cv.string,
+            vol.Optional("new_name"): cv.string,
+            vol.Optional("sequences"): sequences,
+            vol.Optional("start"): cv.datetime,
+            vol.Optional("end"): cv.datetime,
+            vol.Optional("nights"): nights,
+            vol.Optional("start_at_dusk"): cv.boolean,
+            vol.Optional("end_at_dawn"): cv.boolean,
+            vol.Optional("lights"): cv.entity_ids,
+        },
+        "async_update_show",
+    )
     platform.async_register_entity_service(
         SERVICE_SCHEDULE_SHOW,
         {
             vol.Required("name"): cv.string,
-            vol.Required("sequences"): vol.Any(
-                vol.All(cv.ensure_list, [cv.string], vol.Length(min=1)),
-                vol.All({cv.string: vol.All(vol.Coerce(int), vol.Range(1, 86400))}, vol.Length(min=1)),
-            ),
+            vol.Required("sequences"): sequences,
             vol.Required("start"): cv.datetime,
             vol.Required("end"): cv.datetime,
-            vol.Optional("nights", default=1): vol.All(vol.Coerce(int), vol.Range(1, MAX_OCCURRENCES)),
+            vol.Optional("nights", default=1): nights,
             vol.Optional("start_at_dusk", default=False): cv.boolean,
             vol.Optional("end_at_dawn", default=False): cv.boolean,
             vol.Optional("lights"): cv.entity_ids,
@@ -145,37 +162,70 @@ class EverlightsCloudCalendar(EverlightsCloudBridgeEntity, CalendarEntity):
         lights: list[str] | None = None,
     ) -> None:
         """Schedule a show on this bridge. Without lights it covers every zone."""
-        mine = [
+        await self.coordinator.async_create_event(
+            self._serials(lights) or self._zones(), name, _pairs(sequences), _local(start), _local(end),
+            nights=nights, start_at_dusk=start_at_dusk, end_at_dawn=end_at_dawn,
+        )
+
+    async def async_update_show(
+        self,
+        name: str,
+        new_name: str | None = None,
+        sequences: list[str] | dict[str, int] | None = None,
+        start: datetime | None = None,
+        end: datetime | None = None,
+        nights: int | None = None,
+        start_at_dusk: bool | None = None,
+        end_at_dawn: bool | None = None,
+        lights: list[str] | None = None,
+    ) -> None:
+        """Change a show in place. Anything left out stays as it is."""
+        await self.coordinator.async_update_event(
+            self.serial, name,
+            new_name=new_name,
+            sequences=None if sequences is None else _pairs(sequences),
+            zone_serials=self._serials(lights),
+            start=None if start is None else _local(start),
+            end=None if end is None else _local(end),
+            nights=nights, start_at_dusk=start_at_dusk, end_at_dawn=end_at_dawn,
+        )
+
+    def _zones(self) -> list[str]:
+        return [
             z for z, info in self.coordinator.data["zones"].items()
             if info.get("bridgeSerial") == self.serial
         ]
-        if lights:
-            registry = er.async_get(self.hass)
-            serials = []
-            for entity_id in lights:
-                entry = registry.async_get(entity_id)
-                serial = next(
-                    (z for z in mine if entry and entry.platform == DOMAIN and f"_{z}_" in entry.unique_id),
-                    None,
+
+    def _serials(self, lights: list[str] | None) -> list[str] | None:
+        """Turn light entity ids into zone serials on this bridge."""
+        if not lights:
+            return None
+        registry = er.async_get(self.hass)
+        mine, serials = self._zones(), []
+        for entity_id in lights:
+            entry = registry.async_get(entity_id)
+            serial = next(
+                (z for z in mine if entry and entry.platform == DOMAIN and f"_{z}_" in entry.unique_id),
+                None,
+            )
+            if serial is None:
+                raise ServiceValidationError(
+                    f"{entity_id} is not an Everlights light on this bridge"
                 )
-                if serial is None:
-                    raise ServiceValidationError(
-                        f"{entity_id} is not an Everlights light on this bridge"
-                    )
-                serials.append(serial)
-        else:
-            serials = mine
-        pairs: list[tuple[str, int | None]] = (
-            list(sequences.items()) if isinstance(sequences, dict) else [(n, None) for n in sequences]
-        )
-        zone = dt_util.DEFAULT_TIME_ZONE
-        start = start if start.tzinfo else start.replace(tzinfo=zone)
-        end = end if end.tzinfo else end.replace(tzinfo=zone)
-        await self.coordinator.async_create_event(
-            serials, name, pairs, start, end,
-            nights=nights, start_at_dusk=start_at_dusk, end_at_dawn=end_at_dawn,
-        )
+            serials.append(serial)
+        return serials
 
     async def async_delete_show(self, name: str) -> None:
         """Delete a show, with all its nights, by name."""
         await self.coordinator.async_delete_event_named(self.serial, name)
+
+
+def _pairs(sequences: list[str] | dict[str, int]) -> list[tuple[str, int | None]]:
+    if isinstance(sequences, dict):
+        return list(sequences.items())
+    return [(name, None) for name in sequences]
+
+
+def _local(when: datetime) -> datetime:
+    """Times without a zone are in Home Assistant's time zone."""
+    return when if when.tzinfo else when.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)

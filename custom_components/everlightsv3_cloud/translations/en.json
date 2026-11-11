@@ -130,6 +130,48 @@
           "description": "Name of the show to delete."
         }
       }
+    },
+    "update_show": {
+      "name": "Update show",
+      "description": "Changes a scheduled show in place. Anything you leave empty stays as it is.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name of the show to change."
+        },
+        "new_name": {
+          "name": "New name",
+          "description": "Rename the show."
+        },
+        "sequences": {
+          "name": "Sequences",
+          "description": "Replaces the show's sequences. Names mapped to seconds, or a plain list of names for 20 seconds each."
+        },
+        "start": {
+          "name": "Start",
+          "description": "New start of the first night. Needs an end as well."
+        },
+        "end": {
+          "name": "End",
+          "description": "New end of the first night. Needs a start as well."
+        },
+        "nights": {
+          "name": "Nights",
+          "description": "How many nights in a row, counted from the new start. Leave empty to keep the same number."
+        },
+        "start_at_dusk": {
+          "name": "Start at dusk",
+          "description": "Turn starting at dusk on or off."
+        },
+        "end_at_dawn": {
+          "name": "End at dawn",
+          "description": "Turn ending at dawn on or off."
+        },
+        "lights": {
+          "name": "Lights",
+          "description": "Replaces the zones the show runs on."
+        }
+      }
     }
   }
 }

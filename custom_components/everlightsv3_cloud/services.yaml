@@ -109,6 +109,53 @@ schedule_show:
             integration: everlightsv3_cloud
             domain: light
 
+update_show:
+  target:
+    entity:
+      integration: everlightsv3_cloud
+      domain: calendar
+  fields:
+    name:
+      required: true
+      example: Holiday lights
+      selector:
+        text:
+    new_name:
+      example: Winter lights
+      selector:
+        text:
+    sequences:
+      example: '{"Candy Cane": 30, "Warm White": 60}'
+      selector:
+        object:
+    start:
+      example: "2026-12-01 17:00:00"
+      selector:
+        datetime:
+    end:
+      example: "2026-12-01 23:00:00"
+      selector:
+        datetime:
+    nights:
+      selector:
+        number:
+          min: 1
+          max: 366
+          mode: box
+    start_at_dusk:
+      selector:
+        boolean:
+    end_at_dawn:
+      selector:
+        boolean:
+    lights:
+      selector:
+        entity:
+          multiple: true
+          filter:
+            integration: everlightsv3_cloud
+            domain: light
+
 delete_show:
   target:
     entity:

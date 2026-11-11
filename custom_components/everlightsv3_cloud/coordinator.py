@@ -29,7 +29,16 @@ from .const import (
     ZONE_STALE_AFTER,
 )
 from .patterns import normalize_effects, normalize_pattern, normalize_sequence
-from .schedule import ALL_ZONES, DEFAULT_DURATION, build_event, nightly_occurrences, parse_stamp, split_uid, stamp
+from .schedule import (
+    ALL_ZONES,
+    DEFAULT_DURATION,
+    build_event,
+    flags_with,
+    nightly_occurrences,
+    parse_stamp,
+    split_uid,
+    stamp,
+)
 
 type EverlightsCloudConfigEntry = ConfigEntry[EverlightsCloudCoordinator]
 
@@ -449,8 +458,7 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             occurrences = nightly_occurrences(start, end, nights)
         except ValueError as err:
             raise ServiceValidationError(str(err)) from err
-        every = {z for z, info in self.data["zones"].items() if info.get("bridgeSerial") == bridge}
-        serials = [ALL_ZONES] if set(zone_serials) == every else sorted(set(zone_serials))
+        serials = self._zone_field(bridge, zone_serials)
         event = build_event(
             name, resolved, serials, occurrences,
             start_at_dusk=start_at_dusk, end_at_dawn=end_at_dawn, now=dt_util.utcnow(),
@@ -462,6 +470,76 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if not any(e.get("id") == event["id"] for e in self.events[bridge]):
             raise HomeAssistantError(f"The bridge did not schedule '{name}'")
         return event["id"]
+
+    def _zone_field(self, bridge: str, zone_serials: list[str]) -> list[str]:
+        """The zoneSerials value for a show: the app's all-zones marker when it covers every zone."""
+        every = {z for z, info in self.data["zones"].items() if info.get("bridgeSerial") == bridge}
+        return [ALL_ZONES] if set(zone_serials) == every else sorted(set(zone_serials))
+
+    def _show_named(self, bridge: str, name: str) -> dict[str, Any]:
+        named = [
+            e for e in self.events[bridge]
+            if str(e.get("alias", "")).casefold() == name.strip().casefold()
+        ]
+        if not named:
+            raise ServiceValidationError(f"No show named '{name}'")
+        if len(named) > 1:
+            raise ServiceValidationError(f"More than one show is named '{name}'")
+        return named[0]
+
+    async def async_update_event(
+        self,
+        bridge: str,
+        name: str,
+        *,
+        new_name: str | None = None,
+        sequences: list[tuple[str, int | None]] | None = None,
+        zone_serials: list[str] | None = None,
+        start: datetime | None = None,
+        end: datetime | None = None,
+        nights: int | None = None,
+        start_at_dusk: bool | None = None,
+        end_at_dawn: bool | None = None,
+    ) -> None:
+        """Change a show in place. Anything left out stays as it is."""
+        await self._async_reload_events(bridge)
+        event = self._show_named(bridge, name)
+        changed = dict(event)
+        if new_name and new_name.strip():
+            changed["alias"] = new_name.strip()
+        if sequences is not None:
+            if not self.sequences:
+                await self._async_reload_sequences(bridge)
+            changed["sequences"] = [
+                {"sequenceId": self._sequence_id(n), "duration": int(secs or DEFAULT_DURATION)}
+                for n, secs in sequences
+            ]
+        if zone_serials is not None:
+            changed["zoneSerials"] = self._zone_field(bridge, zone_serials)
+        if (start is None) != (end is None):
+            raise ServiceValidationError("Pass both a start and an end to move a show")
+        if start is not None and end is not None:
+            try:
+                changed["occurrences"] = nightly_occurrences(
+                    start, end, nights or len(event.get("occurrences") or []) or 1
+                )
+            except ValueError as err:
+                raise ServiceValidationError(str(err)) from err
+        elif nights is not None:
+            raise ServiceValidationError("Pass a start and an end along with the number of nights")
+        changed["flags"] = flags_with(list(event.get("flags") or []), start_at_dusk, end_at_dawn)
+        keys = ("alias", "sequences", "zoneSerials", "occurrences", "flags")
+        if all(changed.get(k) == event.get(k) for k in keys):
+            raise ServiceValidationError("Nothing to change")
+        changed["lastChanged"] = stamp(dt_util.utcnow())
+        event_id = str(event["id"])
+        await self._async_write(
+            f"change '{name}'", self.client.async_update_event(bridge, event_id, changed)
+        )
+        await self._async_reload_events(bridge)
+        stored = next((e for e in self.events[bridge] if str(e.get("id")) == event_id), None)
+        if stored is None or any(stored.get(k) != changed.get(k) for k in keys):
+            raise HomeAssistantError(f"The bridge did not keep the change to '{name}'")
 
     async def async_delete_event(self, bridge: str, uid: str) -> None:
         """Remove a show, or one night of it when the uid names a night."""
@@ -498,15 +576,7 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     async def async_delete_event_named(self, bridge: str, name: str) -> None:
         """Remove a show by name. Refuses when the name is ambiguous."""
         await self._async_reload_events(bridge)
-        named = [
-            e for e in self.events[bridge]
-            if str(e.get("alias", "")).casefold() == name.strip().casefold()
-        ]
-        if not named:
-            raise ServiceValidationError(f"No show named '{name}'")
-        if len(named) > 1:
-            raise ServiceValidationError(f"More than one show is named '{name}'")
-        await self.async_delete_event(bridge, str(named[0]["id"]))
+        await self.async_delete_event(bridge, str(self._show_named(bridge, name)["id"]))
 
     # ------------------------------------------------------------------ bridge
 

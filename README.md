@@ -12,7 +12,7 @@ Bridge firmware B5010 turned off the local API. Local requests now come back as 
 - Every sequence saved on your bridge as a light effect.
 - Changes made in the EverLights app show up in Home Assistant within a minute.
 - A calendar per bridge with the shows scheduled on it, one entry per night.
-- Actions to save, change, and delete your own sequences, and to schedule and delete shows.
+- Actions to save, change, and delete your own sequences, and to schedule, change, and delete shows.
 - Signal strength, signal to noise, last request, and last response sensors per zone.
 - A cloud connection sensor, last check-in, and scheduled show count per bridge.
 - A reauth prompt when your password changes.
@@ -60,6 +60,7 @@ Calendar actions. Target the bridge's schedule calendar.
 | Action | What it does |
 |---|---|
 | `everlightsv3_cloud.schedule_show` | Schedules a show for one or more nights in a row. |
+| `everlightsv3_cloud.update_show` | Changes a show in place: name, sequences, zones, times, dusk and dawn. Anything left out stays as it is. |
 | `everlightsv3_cloud.delete_show` | Deletes a show and all of its nights. |
 
 Built-in sequences can't be changed or deleted. Only the ones under Personal in the app can.
@@ -112,7 +113,7 @@ These start disabled. Enable the ones you want.
 - It needs the internet and the EverLights cloud. There is no local fallback on B5010.
 - Zones paired to your account but attached to someone else's bridge are skipped.
 - It doesn't pair or unpair bridges and zones, rename them, or change strip length and colour order. Use the app for those.
-- A show's sequences, times, and zones can't be edited in place. Delete it and schedule it again.
+- New shows come from the `schedule_show` action. The calendar's own add dialog has no fields for sequences or zones.
 - If two saved sequences share a name, the effect list shows the name once.
 
 ### What has been tested on real hardware
@@ -124,10 +125,11 @@ Tested on bridge hardware BH300 with firmware B5010 and zone firmware N3063.
 | Reading zones, sequences, schedule, and clock | Tested |
 | Solid colour, off, and clear | Tested |
 | Saving, updating, and deleting a sequence | Tested |
-| Scheduling a show, dropping a night, and deleting a show | Tested |
+| Scheduling, changing, and deleting a show | Tested |
+| A show on one zone firing on time, cycling a chase effect and a solid colour, and ending | Tested |
 | Sync clock and restart | Tested |
-| Effects and multi colour patterns | Same call as a solid colour. Less live testing |
-| A scheduled show actually running at its time | Not yet tested live |
+| Effects sent straight to a light with `light.turn_on` | Same pattern format the show test used. Not tried on its own |
+| Start at dusk and end at dawn | The bridge stores the flags. Their timing is not yet tested |
 
 A restart took about 20 seconds before the bridge answered again. Please open an issue if anything misbehaves.
 

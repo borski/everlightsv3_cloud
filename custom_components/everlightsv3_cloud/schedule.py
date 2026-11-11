@@ -65,6 +65,15 @@ def _shift(when: datetime, by: timedelta) -> datetime:
     return moved.replace(tzinfo=zone)
 
 
+def flags_with(flags: list[str], start_at_dusk: bool | None, end_at_dawn: bool | None) -> list[str]:
+    """Return flags with dusk and dawn switched as asked. None leaves one alone."""
+    out = [f for f in flags if f not in (FLAG_DUSK, FLAG_DAWN)]
+    for flag, wanted in ((FLAG_DUSK, start_at_dusk), (FLAG_DAWN, end_at_dawn)):
+        if wanted or (wanted is None and flag in flags):
+            out.append(flag)
+    return out
+
+
 def build_event(
     name: str,
     sequences: list[tuple[str, int]],
