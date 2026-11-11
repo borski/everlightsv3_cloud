@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import asyncio
+import uuid
 from datetime import datetime
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed, HomeAssistantError
+from homeassistant.exceptions import ConfigEntryAuthFailed, HomeAssistantError, ServiceValidationError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
@@ -20,12 +21,15 @@ from .api import (
 from .const import (
     ACCOUNT_REFRESH_INTERVAL,
     DOMAIN,
+    EVENTS_REFRESH_INTERVAL,
     LOGGER,
+    PERSONAL_GROUP,
     SEQUENCES_REFRESH_INTERVAL,
     UPDATE_INTERVAL,
     ZONE_STALE_AFTER,
 )
-from .patterns import normalize_sequence
+from .patterns import normalize_effects, normalize_pattern, normalize_sequence
+from .schedule import ALL_ZONES, DEFAULT_DURATION, build_event, nightly_occurrences, parse_stamp, split_uid, stamp
 
 type EverlightsCloudConfigEntry = ConfigEntry[EverlightsCloudCoordinator]
 
@@ -67,6 +71,10 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._account: dict[str, dict[str, dict[str, Any]]] | None = None
         self._account_at: datetime | None = None
         self._sequences_at: datetime | None = None
+        # Scheduled shows per bridge serial.
+        self.events: dict[str, list[dict[str, Any]]] = {}
+        self._events_at: dict[str, datetime] = {}
+        self._clock_offset: dict[str, float | None] = {}
         super().__init__(
             hass,
             LOGGER,
@@ -126,6 +134,9 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 bridge["alias"] = known["alias"]
                 bridge["online"] = True
                 await self._async_maybe_load_sequences(serial, now)
+                await self._async_maybe_load_events(serial, now)
+                bridge["clockOffset"] = self._clock_offset.get(serial)
+                bridge["eventCount"] = len(self.events.get(serial, []))
             except EverlightsCloudAuthenticationError:
                 raise
             except EverlightsCloudError as err:
@@ -148,6 +159,27 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except EverlightsCloudError as err:
             # Effects are optional. Plain colours still work without them.
             LOGGER.warning("Could not load the Everlights sequence library: %s", err)
+
+    async def _async_maybe_load_events(self, bridge: str, now: datetime) -> None:
+        """Load the schedule and the bridge clock. Both are optional extras."""
+        last = self._events_at.get(bridge)
+        if last is not None and now - last < EVENTS_REFRESH_INTERVAL:
+            return
+        self._events_at[bridge] = now
+        try:
+            self.events[bridge] = await self.client.async_get_events(bridge)
+            bridge_time = parse_stamp(await self.client.async_get_time(bridge))
+            self._clock_offset[bridge] = (
+                round((bridge_time - dt_util.utcnow()).total_seconds(), 1) if bridge_time else None
+            )
+        except EverlightsCloudAuthenticationError:
+            raise
+        except EverlightsCloudError as err:
+            LOGGER.debug("Could not load the Everlights schedule: %s", err)
+
+    def bridge(self, serial: str) -> dict[str, Any]:
+        """Return the latest data for a bridge."""
+        return (self.data or {}).get("bridges", {}).get(serial, {})
 
     def zone(self, serial: str) -> dict[str, Any]:
         """Return the latest data for a zone."""
@@ -212,3 +244,292 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise HomeAssistantError(
                 f"The command for {name} {reason} but the lights did not change"
             )
+
+    # ------------------------------------------------------------ more writes
+
+    def _bridge_of(self, serial: str) -> str:
+        bridge = self.zone(serial).get("bridgeSerial")
+        if not bridge:
+            raise HomeAssistantError("Unknown Everlights zone")
+        return bridge
+
+    async def _async_write(self, what: str, call) -> bool:
+        """Run one write. Return False when no answer came back, so the caller checks."""
+        try:
+            await call
+        except EverlightsCloudCommandUnknownError:
+            LOGGER.warning("No answer to %s. Checking what the bridge did", what)
+            return False
+        except EverlightsCloudAuthenticationError as err:
+            self.config_entry.async_start_reauth(self.hass)
+            raise HomeAssistantError(f"Everlights rejected the login: {err}") from err
+        except EverlightsCloudError as err:
+            raise HomeAssistantError(f"Everlights could not {what}: {err}") from err
+        return True
+
+    async def _async_reload_sequences(self, bridge: str) -> None:
+        try:
+            self.sequences = await self.client.async_get_sequences(bridge)
+            self._sequences_at = dt_util.utcnow()
+        except EverlightsCloudError as err:
+            raise HomeAssistantError(
+                f"Could not read the sequence library back, so the result is unknown: {err}"
+            ) from err
+        self.async_update_listeners()
+
+    async def async_clear_zone(self, serial: str) -> None:
+        """Drop the override on a zone and show whatever the bridge falls back to."""
+        bridge = self._bridge_of(serial)
+        name = self.zone(serial).get("alias", serial)
+        answered = await self._async_write(
+            f"clear {name}", self.client.async_clear_zone_sequence(bridge, serial)
+        )
+        try:
+            actual = normalize_sequence(await self.client.async_get_zone_sequence(bridge, serial))
+        except EverlightsCloudError as err:
+            raise HomeAssistantError(
+                f"Could not read {name} back after clearing it: {err}"
+            ) from err
+        data = dict(self.data)
+        data["zones"] = dict(data["zones"])
+        data["zones"][serial] = dict(data["zones"][serial], **actual)
+        self.async_set_updated_data(data)
+        if not answered:
+            raise HomeAssistantError(
+                f"The clear command for {name} got no answer. The state shown is what the bridge reports now"
+            )
+
+    async def async_save_sequence(
+        self, serial: str, name: str, pattern: list[str], effects: list[dict[str, Any]]
+    ) -> None:
+        """Save a new sequence in the bridge's library and confirm it is listed."""
+        bridge = self._bridge_of(serial)
+        name = name.strip()
+        pattern, effects = normalize_pattern(pattern), normalize_effects(effects)
+        if not name or not pattern:
+            raise ServiceValidationError("A sequence needs a name and at least one colour")
+        await self._async_reload_sequences(bridge)
+        if any(s.get("alias", "").casefold() == name.casefold() for s in self.sequences):
+            raise ServiceValidationError(f"A sequence named '{name}' already exists")
+        sequence_id = str(uuid.uuid4())
+        await self._async_write(
+            f"save sequence '{name}'",
+            self.client.async_create_sequence(
+                bridge,
+                {
+                    "id": sequence_id,
+                    "alias": name,
+                    "groups": [PERSONAL_GROUP],
+                    "colorMode": "rgb",
+                    "pattern": pattern,
+                    "effects": effects,
+                    "lastChanged": dt_util.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+                },
+            ),
+        )
+        await self._async_reload_sequences(bridge)
+        if not any(s.get("id") == sequence_id for s in self.sequences):
+            raise HomeAssistantError(f"The bridge did not save the sequence '{name}'")
+
+    async def async_delete_sequence(self, serial: str, name: str) -> None:
+        """Delete one of your own saved sequences and confirm it is gone."""
+        bridge = self._bridge_of(serial)
+        await self._async_reload_sequences(bridge)
+        sequence_id = self._own_sequence(name)["id"]
+        await self._async_write(
+            f"delete sequence '{name}'", self.client.async_delete_sequence(bridge, sequence_id)
+        )
+        await self._async_reload_sequences(bridge)
+        if any(s.get("id") == sequence_id for s in self.sequences):
+            raise HomeAssistantError(f"The bridge did not delete the sequence '{name}'")
+
+    async def async_update_sequence(
+        self,
+        serial: str,
+        name: str,
+        pattern: list[str] | None,
+        effects: list[dict[str, Any]] | None,
+        new_name: str | None = None,
+    ) -> None:
+        """Change one of your own saved sequences and confirm the bridge kept it."""
+        bridge = self._bridge_of(serial)
+        await self._async_reload_sequences(bridge)
+        current = self._own_sequence(name)
+        changed = dict(current)
+        if pattern is not None:
+            changed["pattern"] = normalize_pattern(pattern)
+            if not changed["pattern"]:
+                raise ServiceValidationError("A sequence needs at least one colour")
+        if effects is not None:
+            changed["effects"] = normalize_effects(effects)
+        if new_name and new_name.strip().casefold() != name.strip().casefold():
+            new_name = new_name.strip()
+            if any(s.get("alias", "").casefold() == new_name.casefold() for s in self.sequences):
+                raise ServiceValidationError(f"A sequence named '{new_name}' already exists")
+            changed["alias"] = new_name
+        changed["lastChanged"] = stamp(dt_util.utcnow())
+        await self._async_write(
+            f"update sequence '{name}'",
+            self.client.async_update_sequence(bridge, current["id"], changed),
+        )
+        await self._async_reload_sequences(bridge)
+        stored = next((s for s in self.sequences if s.get("id") == current["id"]), None)
+        if (
+            stored is None
+            or normalize_sequence(stored) != normalize_sequence(changed)
+            or stored.get("alias") != changed.get("alias")
+        ):
+            raise HomeAssistantError(f"The bridge did not keep the change to '{name}'")
+
+    def _own_sequence(self, name: str) -> dict[str, Any]:
+        named = [s for s in self.sequences if s.get("alias", "").casefold() == name.strip().casefold()]
+        if not named:
+            raise ServiceValidationError(f"No sequence named '{name}'")
+        own = [s for s in named if PERSONAL_GROUP in (s.get("groups") or []) and s.get("id")]
+        if not own:
+            raise ServiceValidationError(f"'{name}' is a built-in sequence and can't be changed")
+        if len(own) > 1:
+            raise ServiceValidationError(
+                f"More than one of your sequences is named '{name}'. Change it in the app"
+            )
+        return own[0]
+
+    # ---------------------------------------------------------------- schedule
+
+    async def _async_reload_events(self, bridge: str) -> None:
+        try:
+            self.events[bridge] = await self.client.async_get_events(bridge)
+            self._events_at[bridge] = dt_util.utcnow()
+        except EverlightsCloudError as err:
+            raise HomeAssistantError(
+                f"Could not read the schedule back, so the result is unknown: {err}"
+            ) from err
+        data = dict(self.data)
+        data["bridges"] = dict(data["bridges"])
+        data["bridges"][bridge] = dict(data["bridges"][bridge], eventCount=len(self.events[bridge]))
+        self.async_set_updated_data(data)
+
+    def _sequence_id(self, name: str) -> str:
+        """Resolve a sequence name to its id.
+
+        Where a name is duplicated the later copy wins, the same one the effect list uses.
+        """
+        named = [
+            s for s in self.sequences
+            if s.get("alias", "").casefold() == name.strip().casefold() and s.get("id")
+        ]
+        if not named:
+            raise ServiceValidationError(f"No sequence named '{name}'")
+        return named[-1]["id"]
+
+    async def async_create_event(
+        self,
+        zone_serials: list[str],
+        name: str,
+        sequences: list[tuple[str, int | None]],
+        start: datetime,
+        end: datetime,
+        *,
+        nights: int = 1,
+        start_at_dusk: bool = False,
+        end_at_dawn: bool = False,
+    ) -> str:
+        """Schedule a show on the bridge that owns the zones. Returns the event id."""
+        name = name.strip()
+        bridges = {self._bridge_of(z) for z in zone_serials}
+        if not name or not sequences or len(bridges) != 1:
+            raise ServiceValidationError(
+                "A show needs a name, at least one sequence, and zones on a single bridge"
+            )
+        bridge = bridges.pop()
+        if not self.sequences:
+            await self._async_reload_sequences(bridge)
+        resolved = [(self._sequence_id(n), secs or DEFAULT_DURATION) for n, secs in sequences]
+        try:
+            occurrences = nightly_occurrences(start, end, nights)
+        except ValueError as err:
+            raise ServiceValidationError(str(err)) from err
+        every = {z for z, info in self.data["zones"].items() if info.get("bridgeSerial") == bridge}
+        serials = [ALL_ZONES] if set(zone_serials) == every else sorted(set(zone_serials))
+        event = build_event(
+            name, resolved, serials, occurrences,
+            start_at_dusk=start_at_dusk, end_at_dawn=end_at_dawn, now=dt_util.utcnow(),
+        )
+        await self._async_write(
+            f"schedule '{name}'", self.client.async_create_event(bridge, event)
+        )
+        await self._async_reload_events(bridge)
+        if not any(e.get("id") == event["id"] for e in self.events[bridge]):
+            raise HomeAssistantError(f"The bridge did not schedule '{name}'")
+        return event["id"]
+
+    async def async_delete_event(self, bridge: str, uid: str) -> None:
+        """Remove a show, or one night of it when the uid names a night."""
+        await self._async_reload_events(bridge)
+        event_id, index = split_uid(uid)
+        event = next((e for e in self.events[bridge] if str(e.get("id")) == event_id), None)
+        if event is None:
+            event_id, index = uid, None
+            event = next((e for e in self.events[bridge] if str(e.get("id")) == uid), None)
+        if event is None:
+            raise ServiceValidationError("That show is no longer on the bridge")
+        name = event.get("alias", event_id)
+        occurrences = list(event.get("occurrences") or [])
+        if index is None or len(occurrences) <= 1:
+            await self._async_write(
+                f"delete '{name}'", self.client.async_delete_event(bridge, event_id)
+            )
+            await self._async_reload_events(bridge)
+            if any(str(e.get("id")) == event_id for e in self.events[bridge]):
+                raise HomeAssistantError(f"The bridge did not delete '{name}'")
+            return
+        if not 0 <= index < len(occurrences):
+            raise ServiceValidationError("That night is no longer part of the show")
+        del occurrences[index]
+        changed = dict(event, occurrences=occurrences, lastChanged=stamp(dt_util.utcnow()))
+        await self._async_write(
+            f"change '{name}'", self.client.async_update_event(bridge, event_id, changed)
+        )
+        await self._async_reload_events(bridge)
+        stored = next((e for e in self.events[bridge] if str(e.get("id")) == event_id), None)
+        if stored is None or len(stored.get("occurrences") or []) != len(occurrences):
+            raise HomeAssistantError(f"The bridge did not keep the change to '{name}'")
+
+    async def async_delete_event_named(self, bridge: str, name: str) -> None:
+        """Remove a show by name. Refuses when the name is ambiguous."""
+        await self._async_reload_events(bridge)
+        named = [
+            e for e in self.events[bridge]
+            if str(e.get("alias", "")).casefold() == name.strip().casefold()
+        ]
+        if not named:
+            raise ServiceValidationError(f"No show named '{name}'")
+        if len(named) > 1:
+            raise ServiceValidationError(f"More than one show is named '{name}'")
+        await self.async_delete_event(bridge, str(named[0]["id"]))
+
+    # ------------------------------------------------------------------ bridge
+
+    async def async_sync_clock(self, bridge: str) -> None:
+        """Set the bridge's clock to Home Assistant's and read it back."""
+        await self._async_write(
+            "set the bridge clock", self.client.async_set_time(bridge, stamp(dt_util.utcnow()))
+        )
+        try:
+            bridge_time = parse_stamp(await self.client.async_get_time(bridge))
+        except EverlightsCloudError as err:
+            raise HomeAssistantError(f"Could not read the bridge clock back: {err}") from err
+        if bridge_time is None:
+            raise HomeAssistantError("The bridge did not report its clock")
+        offset = round((bridge_time - dt_util.utcnow()).total_seconds(), 1)
+        self._clock_offset[bridge] = offset
+        data = dict(self.data)
+        data["bridges"] = dict(data["bridges"])
+        data["bridges"][bridge] = dict(data["bridges"][bridge], clockOffset=offset)
+        self.async_set_updated_data(data)
+        if abs(offset) > 30:
+            raise HomeAssistantError(f"The bridge clock is still {offset:.0f} seconds off")
+
+    async def async_reboot(self, bridge: str) -> None:
+        """Restart a bridge. Nothing can confirm it but the bridge coming back."""
+        await self._async_write("restart the bridge", self.client.async_reboot(bridge))

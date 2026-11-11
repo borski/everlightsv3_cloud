@@ -12,7 +12,7 @@ talks to two hosts, and so does this client:
 Rules this client follows:
 
 * Reads (GET) are retried on transient failures.
-* Writes (POST) are sent exactly once. A timed-out write is reported as
+* Writes (POST, PUT, DELETE) are sent exactly once. A timed-out write is reported as
   "outcome unknown" and never replayed. Callers confirm by reading back.
 * An auth rejection is a definitive "not executed", so one re-authenticated
   attempt is allowed for any verb.
@@ -41,7 +41,7 @@ RETRY_DELAY = 0.5
 
 HEADERS = {
     "Accept": "application/json",
-    "User-Agent": "HomeAssistant-everlightsv3_cloud/0.1",
+    "User-Agent": "HomeAssistant-everlightsv3_cloud/0.2",
 }
 
 
@@ -261,13 +261,13 @@ class EverlightsCloudClient:
         raise EverlightsCloudAuthenticationError("Everlights rejected a fresh access token")
 
     async def _async_remote(
-        self, method: str, bridge: str, path: str, json_body: Any = None
+        self, method: str, bridge: str, path: str, json_body: Any = None, once: bool = False
     ) -> Any:
         url = f"{REMOTE_URL}/{bridge}/{path}"
         what = f"bridge {method} {path.split('/')[0]}"
         for force in (False, True):
             token = await self._async_ensure_remote(bridge, force=force)
-            if method == "GET":
+            if method == "GET" and not once:
                 status, body, headers = await self._async_read(
                     lambda token=token: self._async_send("GET", url, token=token)
                 )
@@ -347,7 +347,63 @@ class EverlightsCloudClient:
             raise EverlightsCloudError("Unexpected zone sequence payload")
         return body
 
+    async def async_get_sequence(self, bridge: str, sequence_id: str) -> dict[str, Any]:
+        """Return one saved sequence by id."""
+        body = await self._async_remote("GET", bridge, f"proxy/v1/sequences/{sequence_id}")
+        if not isinstance(body, dict):
+            raise EverlightsCloudError("Unexpected sequence payload")
+        return body
+
+    async def async_get_events(self, bridge: str) -> list[dict[str, Any]]:
+        """Return the shows scheduled on the bridge."""
+        body = await self._async_remote("GET", bridge, "proxy/v1/events")
+        if not isinstance(body, list):
+            raise EverlightsCloudError("Unexpected events payload")
+        return [e for e in body if isinstance(e, dict)]
+
+    async def async_get_time(self, bridge: str) -> str | None:
+        """Return the bridge's clock as an ISO timestamp."""
+        body = await self._async_remote("GET", bridge, "proxy/v1/time")
+        return body.get("time") if isinstance(body, dict) else None
+
+    async def async_get_profile(self) -> dict[str, Any]:
+        """Return the account record (id, email, names, dates)."""
+        body = await self._async_cloud_get("account")
+        return body if isinstance(body, dict) else {}
+
+    async def async_get_shared_sequences(self) -> list[dict[str, Any]]:
+        """Return sequences other accounts have shared with this one."""
+        body = await self._async_cloud_get("shared/sequences")
+        return [s for s in body if isinstance(s, dict)] if isinstance(body, list) else []
+
+    async def async_get_min_app_version(self) -> str | None:
+        """Return the oldest app version the cloud still accepts."""
+        body = await self._async_cloud_get("minappversion")
+        return body.strip() if isinstance(body, str) and body.strip() else None
+
     # ----------------------------------------------------------------- writes
+
+    async def _async_write(self, method: str, bridge: str, path: str, json_body: Any = None) -> Any:
+        """Send one write through the tunnel. Sent once. Never replayed.
+
+        A GET passed here is a command in disguise (reboot) and gets the same treatment.
+        """
+        async with self._write_lock:
+            wait = WRITE_GAP - (time.monotonic() - self._last_write)
+            if wait > 0:
+                await asyncio.sleep(wait)
+            try:
+                return await self._async_remote(
+                    method, bridge, path, json_body=json_body, once=True
+                )
+            except EverlightsCloudCommunicationError as err:
+                if method == "GET" and "Timeout" in str(err):
+                    raise EverlightsCloudCommandUnknownError(
+                        "No answer. The command may or may not have applied"
+                    ) from err
+                raise
+            finally:
+                self._last_write = time.monotonic()
 
     async def async_set_zone_sequence(
         self, bridge: str, zone: str, sequence: dict[str, Any]
@@ -358,13 +414,51 @@ class EverlightsCloudClient:
         A normal return only means the cloud accepted the request. Read the
         zone back to learn whether the lights changed.
         """
-        async with self._write_lock:
-            wait = WRITE_GAP - (time.monotonic() - self._last_write)
-            if wait > 0:
-                await asyncio.sleep(wait)
-            try:
-                return await self._async_remote(
-                    "POST", bridge, f"proxy/v1/zones/{zone}/sequence", json_body=sequence
-                )
-            finally:
-                self._last_write = time.monotonic()
+        return await self._async_write(
+            "POST", bridge, f"proxy/v1/zones/{zone}/sequence", json_body=sequence
+        )
+
+    async def async_clear_zone_sequence(self, bridge: str, zone: str) -> None:
+        """Drop whatever was sent to a zone and hand it back to the bridge's schedule.
+
+        Verified on B5010: answers 204, and with nothing scheduled the zone goes dark.
+        """
+        await self._async_write("DELETE", bridge, f"proxy/v1/zones/{zone}/sequence")
+
+    async def async_create_sequence(self, bridge: str, sequence: dict[str, Any]) -> Any:
+        """Save a sequence in the bridge's library. Verified on B5010: answers 201."""
+        return await self._async_write("POST", bridge, "proxy/v1/sequences", json_body=sequence)
+
+    async def async_delete_sequence(self, bridge: str, sequence_id: str) -> None:
+        """Delete a saved sequence by id. Verified on B5010: answers 204."""
+        await self._async_write("DELETE", bridge, f"proxy/v1/sequences/{sequence_id}")
+
+    async def async_update_sequence(
+        self, bridge: str, sequence_id: str, sequence: dict[str, Any]
+    ) -> Any:
+        """Replace a saved sequence. The old local API answered 200."""
+        return await self._async_write(
+            "PUT", bridge, f"proxy/v1/sequences/{sequence_id}", json_body=sequence
+        )
+
+    async def async_create_event(self, bridge: str, event: dict[str, Any]) -> Any:
+        """Schedule a show. The old local API answered 201."""
+        return await self._async_write("POST", bridge, "proxy/v1/events", json_body=event)
+
+    async def async_update_event(self, bridge: str, event_id: str, event: dict[str, Any]) -> Any:
+        """Replace a scheduled show. The old local API answered 200."""
+        return await self._async_write(
+            "PUT", bridge, f"proxy/v1/events/{event_id}", json_body=event
+        )
+
+    async def async_delete_event(self, bridge: str, event_id: str) -> None:
+        """Remove a scheduled show. The old local API answered 204."""
+        await self._async_write("DELETE", bridge, f"proxy/v1/events/{event_id}")
+
+    async def async_set_time(self, bridge: str, when: str) -> Any:
+        """Set the bridge's clock to an ISO timestamp."""
+        return await self._async_write("PUT", bridge, "proxy/v1/time", json_body={"time": when})
+
+    async def async_reboot(self, bridge: str) -> None:
+        """Restart the bridge. It is a GET on the bridge, but it is sent once like a write."""
+        await self._async_write("GET", bridge, "proxy/v1/reboot")

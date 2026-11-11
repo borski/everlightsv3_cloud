@@ -16,8 +16,23 @@ REMOTE_URL = "https://remote.myeverlights.com/bridges"
 UPDATE_INTERVAL = timedelta(seconds=60)
 ACCOUNT_REFRESH_INTERVAL = timedelta(hours=1)
 SEQUENCES_REFRESH_INTERVAL = timedelta(hours=6)
+EVENTS_REFRESH_INTERVAL = timedelta(minutes=5)
 # A zone that has not answered its bridge for this long is shown unavailable.
 ZONE_STALE_AFTER = timedelta(minutes=15)
 
 OFF_SEQUENCE: dict[str, list] = {"pattern": [], "effects": []}
 DEFAULT_COLOR = "FFFFFF"
+
+# Group the app files user-made sequences under. Only these can be deleted here.
+PERSONAL_GROUP = "Personal/"
+EFFECT_TYPES = (
+    "bars", "blink", "chase", "fade", "gradient", "lightning", "melt",
+    "pingPong", "random", "reverseChase", "strobe", "twinkle", "wipe",
+)
+
+SERVICE_CLEAR = "clear"
+SERVICE_SAVE_SEQUENCE = "save_sequence"
+SERVICE_DELETE_SEQUENCE = "delete_sequence"
+SERVICE_UPDATE_SEQUENCE = "update_sequence"
+SERVICE_SCHEDULE_SHOW = "schedule_show"
+SERVICE_DELETE_SHOW = "delete_show"

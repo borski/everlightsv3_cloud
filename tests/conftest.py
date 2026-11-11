@@ -6,6 +6,7 @@ import copy
 import json
 import re
 import time
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 from unittest.mock import patch
@@ -75,6 +76,14 @@ class FakeCloud:
         self.sequences: dict[str, dict] = {
             z: {"pattern": [], "effects": []} for z in (GARAGE, FRONT, BACK)
         }
+        # What a zone falls back to when its override is cleared.
+        self.scheduled: dict = {"pattern": [], "effects": []}
+        for index, sequence in enumerate(self.library):
+            sequence["id"] = f"seq-{index:03d}"
+        self.events: list[dict] = []
+        # Seconds the bridge clock runs ahead of real time.
+        self.clock_skew = 0.0
+        self.reboots = 0
         self.calls: list[tuple[str, str]] = []
         self.posts: list[tuple[str, dict]] = []
         # Knobs. Each maps a call label (see _label) to a queue of overrides.
@@ -86,6 +95,8 @@ class FakeCloud:
         mocker.get(re.compile(rf"{re.escape(CLOUD_URL)}/.*"), side_effect=self._cloud)
         mocker.get(re.compile(rf"{re.escape(REMOTE_URL)}/.*"), side_effect=self._remote)
         mocker.post(re.compile(rf"{re.escape(REMOTE_URL)}/.*"), side_effect=self._remote)
+        mocker.delete(re.compile(rf"{re.escape(REMOTE_URL)}/.*"), side_effect=self._remote)
+        mocker.put(re.compile(rf"{re.escape(REMOTE_URL)}/.*"), side_effect=self._remote)
 
     # -- helpers
     def count(self, method: str, label: str) -> int:
@@ -162,10 +173,14 @@ class FakeCloud:
         zone = None
         if seq := re.match(r"^zones/([^/]+)/sequence$", path):
             zone, label = seq.group(1), "sequence"
+        elif path.startswith("sequences/"):
+            label = "sequences"
+        elif path.startswith("events/"):
+            label = "events"
         else:
             label = path or "status"
         self.calls.append((method, label))
-        if method == "POST":
+        if method == "POST" and label == "sequence":
             self.posts.append((zone, copy.deepcopy(data)))
         if (response := self._override(method, url, label)) is not None:
             return response
@@ -173,8 +188,58 @@ class FakeCloud:
             return AiohttpClientMockResponse(method, url, status=401, text="")
         if label == "status":
             return self._json(method, url, self.status)
-        if label == "sequences":
+        if label == "sequences" and method == "GET":
             return self._json(method, url, self.library)
+        if label == "sequences" and method == "POST":
+            if any(s["id"] == data["id"] for s in self.library):
+                return AiohttpClientMockResponse(method, url, status=409, text="exists")
+            if not self.ignore_writes:
+                self.library.append(copy.deepcopy(data))
+            return self._json(method, url, data, status=201)
+        if label == "sequences" and method == "DELETE":
+            if not self.ignore_writes:
+                self.library = [s for s in self.library if s["id"] != path.split("/", 1)[1]]
+            return AiohttpClientMockResponse(method, url, status=204, text="")
+        if label == "sequences" and method == "PUT":
+            sequence_id = path.split("/", 1)[1]
+            if not any(s["id"] == sequence_id for s in self.library):
+                return AiohttpClientMockResponse(method, url, status=404, text="")
+            if not self.ignore_writes:
+                self.library = [
+                    copy.deepcopy(data) if s["id"] == sequence_id else s for s in self.library
+                ]
+            return self._json(method, url, data)
+        if label == "events" and method == "GET":
+            return self._json(method, url, self.events)
+        if label == "events" and method == "POST":
+            if not self.ignore_writes:
+                self.events.append(copy.deepcopy(data))
+            return self._json(method, url, data, status=201)
+        if label == "events" and method in ("PUT", "DELETE"):
+            event_id = path.split("/", 1)[1]
+            if not any(e["id"] == event_id for e in self.events):
+                return AiohttpClientMockResponse(method, url, status=404, text="")
+            if not self.ignore_writes:
+                kept = [e for e in self.events if e["id"] != event_id]
+                self.events = kept + ([copy.deepcopy(data)] if method == "PUT" else [])
+            if method == "PUT":
+                return self._json(method, url, data)
+            return AiohttpClientMockResponse(method, url, status=204, text="")
+        if label == "time" and method == "GET":
+            now = datetime.now(UTC) + timedelta(seconds=self.clock_skew)
+            return self._json(method, url, {"time": now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"})
+        if label == "time" and method == "PUT":
+            if not self.ignore_writes:
+                sent = datetime.fromisoformat(data["time"].replace("Z", "+00:00"))
+                self.clock_skew = (sent - datetime.now(UTC)).total_seconds()
+            return self._json(method, url, data)
+        if label == "reboot":
+            self.reboots += 1
+            return self._json(method, url, "OK")
+        if label == "sequence" and method == "DELETE":
+            if not self.ignore_writes:
+                self.sequences[zone] = copy.deepcopy(self.scheduled)
+            return AiohttpClientMockResponse(method, url, status=204, text="")
         if label == "connection":
             return self._json(method, url, load_fixture("remote_connection", PROXY_MAP))
         if label == "sequence" and method == "GET":

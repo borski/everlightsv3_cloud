@@ -3,7 +3,9 @@ from __future__ import annotations
 
 from typing import Any
 
+import homeassistant.helpers.config_validation as cv
 import homeassistant.util.color as color_util
+import voluptuous as vol
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_EFFECT,
@@ -16,9 +18,18 @@ from homeassistant.components.light import (
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ServiceValidationError
+from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DEFAULT_COLOR, OFF_SEQUENCE
+from .const import (
+    DEFAULT_COLOR,
+    EFFECT_TYPES,
+    OFF_SEQUENCE,
+    SERVICE_CLEAR,
+    SERVICE_DELETE_SEQUENCE,
+    SERVICE_SAVE_SEQUENCE,
+    SERVICE_UPDATE_SEQUENCE,
+)
 from .coordinator import EverlightsCloudConfigEntry, EverlightsCloudCoordinator
 from .entity import EverlightsCloudEntity
 from .patterns import (
@@ -48,6 +59,38 @@ async def async_setup_entry(
         EverlightsCloudLight(coordinator, ENTITY_DESCRIPTION, serial)
         for serial in coordinator.data["zones"]
     )
+
+    platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service(SERVICE_CLEAR, None, "async_clear")
+    platform.async_register_entity_service(
+        SERVICE_SAVE_SEQUENCE,
+        {
+            vol.Required("name"): cv.string,
+            vol.Optional("colors"): vol.All(cv.ensure_list, [_hex_colour], vol.Length(min=1)),
+            vol.Optional("effects"): {vol.In(EFFECT_TYPES): vol.All(vol.Coerce(int), vol.Range(0, 255))},
+        },
+        "async_save_sequence",
+    )
+    platform.async_register_entity_service(
+        SERVICE_UPDATE_SEQUENCE,
+        {
+            vol.Required("name"): cv.string,
+            vol.Optional("new_name"): cv.string,
+            vol.Optional("colors"): vol.All(cv.ensure_list, [_hex_colour], vol.Length(min=1)),
+            vol.Optional("effects"): {vol.In(EFFECT_TYPES): vol.All(vol.Coerce(int), vol.Range(0, 255))},
+        },
+        "async_update_sequence",
+    )
+    platform.async_register_entity_service(
+        SERVICE_DELETE_SEQUENCE, {vol.Required("name"): cv.string}, "async_delete_sequence"
+    )
+
+
+def _hex_colour(value: Any) -> str:
+    try:
+        return rgb_to_hex(hex_to_rgb(str(value)))
+    except ValueError as err:
+        raise vol.Invalid(f"{value!r} is not an RRGGBB colour") from err
 
 
 class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
@@ -203,3 +246,47 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
         await self.coordinator.async_send_sequence(self.serial, OFF_SEQUENCE)
         self._attr_is_on = False
         self.async_write_ha_state()
+
+    # ----------------------------------------------------------- services
+
+    async def async_clear(self) -> None:
+        """Drop what was sent to this zone and let the bridge's schedule take over."""
+        await self.coordinator.async_clear_zone(self.serial)
+
+    async def async_save_sequence(
+        self, name: str, colors: list[str] | None = None, effects: dict[str, int] | None = None
+    ) -> None:
+        """Save colours as a sequence on the bridge. Defaults to what this light shows now."""
+        if colors is None:
+            if not (self._attr_is_on and self._base):
+                raise ServiceValidationError(
+                    "The light is off. Turn it on or pass colours to save"
+                )
+            pattern = list(self._base)
+            effect_list = self._base_effects if effects is None else None
+        else:
+            pattern, effect_list = colors, None
+        if effect_list is None:
+            effect_list = [{"effectType": k, "value": v} for k, v in (effects or {}).items()]
+        await self.coordinator.async_save_sequence(self.serial, name, pattern, effect_list)
+
+    async def async_update_sequence(
+        self,
+        name: str,
+        new_name: str | None = None,
+        colors: list[str] | None = None,
+        effects: dict[str, int] | None = None,
+    ) -> None:
+        """Change the colours, effects, or name of one of your own saved sequences."""
+        if new_name is None and colors is None and effects is None:
+            raise ServiceValidationError("Nothing to change. Pass a new name, colours, or effects")
+        effect_list = (
+            None if effects is None else [{"effectType": k, "value": v} for k, v in effects.items()]
+        )
+        await self.coordinator.async_update_sequence(
+            self.serial, name, colors, effect_list, new_name
+        )
+
+    async def async_delete_sequence(self, name: str) -> None:
+        """Delete one of your own saved sequences from the bridge."""
+        await self.coordinator.async_delete_sequence(self.serial, name)

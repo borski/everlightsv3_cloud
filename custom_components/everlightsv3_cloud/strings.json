@@ -27,5 +27,109 @@
       "no_bridges": "This account has no Everlights bridge paired to it.",
       "unknown": "Unexpected error. Check the Home Assistant log."
     }
+  },
+  "services": {
+    "clear": {
+      "name": "Clear",
+      "description": "Drops what Home Assistant sent to the zone and hands it back to the schedule on the bridge. With nothing scheduled, the lights go off."
+    },
+    "save_sequence": {
+      "name": "Save sequence",
+      "description": "Saves colours and effects as a sequence on the bridge. It shows up as an effect and in the EverLights app under Personal.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name for the new sequence. It must not match an existing one."
+        },
+        "colors": {
+          "name": "Colours",
+          "description": "List of RRGGBB colours. Leave empty to save what the light is showing now."
+        },
+        "effects": {
+          "name": "Effects",
+          "description": "Effect types mapped to a strength from 0 to 255, for example chase: 100. Leave empty to keep the effects the light is showing now."
+        }
+      }
+    },
+    "delete_sequence": {
+      "name": "Delete sequence",
+      "description": "Deletes one of your own saved sequences from the bridge. Built-in sequences can't be deleted.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name of the sequence to delete."
+        }
+      }
+    },
+    "update_sequence": {
+      "name": "Update sequence",
+      "description": "Changes the colours, effects, or name of one of your own saved sequences. Built-in sequences can't be changed.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name of the sequence to change."
+        },
+        "new_name": {
+          "name": "New name",
+          "description": "Rename the sequence. Leave empty to keep its name."
+        },
+        "colors": {
+          "name": "Colours",
+          "description": "List of RRGGBB colours that replaces the current ones. Leave empty to keep them."
+        },
+        "effects": {
+          "name": "Effects",
+          "description": "Effect types mapped to a strength from 0 to 255. Replaces the current effects. Leave empty to keep them."
+        }
+      }
+    },
+    "schedule_show": {
+      "name": "Schedule show",
+      "description": "Schedules a show on the bridge. The bridge runs it by itself, even if Home Assistant is down. During the show it cycles through the sequences.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name of the show."
+        },
+        "sequences": {
+          "name": "Sequences",
+          "description": "Sequence names mapped to how many seconds each one shows, or a plain list of names for 20 seconds each."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Start of the first night."
+        },
+        "end": {
+          "name": "End",
+          "description": "End of the first night. It can be past midnight."
+        },
+        "nights": {
+          "name": "Nights",
+          "description": "How many nights in a row to repeat it."
+        },
+        "start_at_dusk": {
+          "name": "Start at dusk",
+          "description": "Let the bridge start at dusk instead of the start time. The date still comes from the start."
+        },
+        "end_at_dawn": {
+          "name": "End at dawn",
+          "description": "Let the bridge end at dawn instead of the end time."
+        },
+        "lights": {
+          "name": "Lights",
+          "description": "Everlights lights to include. Leave empty for every zone on the bridge."
+        }
+      }
+    },
+    "delete_show": {
+      "name": "Delete show",
+      "description": "Deletes a scheduled show and all of its nights. To drop a single night, delete it from the calendar.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name of the show to delete."
+        }
+      }
+    }
   }
 }

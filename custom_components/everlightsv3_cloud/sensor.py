@@ -14,7 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .coordinator import EverlightsCloudConfigEntry, parse_timestamp
-from .entity import EverlightsCloudEntity
+from .entity import EverlightsCloudBridgeEntity, EverlightsCloudEntity
 
 # Keys match the local `everlights` integration so its sensors can be adopted.
 ENTITY_DESCRIPTIONS = (
@@ -56,6 +56,64 @@ ENTITY_DESCRIPTIONS = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
     ),
+    # The bridge reports these as bare numbers and nothing documents the units.
+    SensorEntityDescription(
+        key="voltage",
+        name="Voltage Raw",
+        icon="mdi:flash-triangle-outline",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    SensorEntityDescription(
+        key="temperature",
+        name="Temperature Raw",
+        icon="mdi:thermometer-lines",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    SensorEntityDescription(
+        key="configuredLength",
+        name="Configured Length",
+        icon="mdi:ruler",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+)
+
+BRIDGE_DESCRIPTIONS = (
+    SensorEntityDescription(
+        key="lastServerCheckin",
+        name="Last Check-in",
+        icon="mdi:cloud-check-outline",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    SensorEntityDescription(
+        key="eventCount",
+        name="Scheduled Shows",
+        icon="mdi:calendar-star",
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    SensorEntityDescription(
+        key="clockOffset",
+        name="Clock Offset",
+        icon="mdi:clock-alert-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement="s",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    SensorEntityDescription(
+        key="rebootCount",
+        name="Reboot Count",
+        icon="mdi:restart",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
 )
 
 
@@ -71,6 +129,11 @@ async def async_setup_entry(
         for serial in coordinator.data["zones"]
         for description in ENTITY_DESCRIPTIONS
     )
+    async_add_entities(
+        EverlightsCloudBridgeSensor(coordinator, description, serial)
+        for serial in coordinator.data["bridges"]
+        for description in BRIDGE_DESCRIPTIONS
+    )
 
 
 class EverlightsCloudSensor(EverlightsCloudEntity, SensorEntity):
@@ -85,6 +148,18 @@ class EverlightsCloudSensor(EverlightsCloudEntity, SensorEntity):
     def native_value(self) -> Any:
         """Return the reading."""
         value = self.zone.get(self.entity_description.key)
+        if self.entity_description.device_class == SensorDeviceClass.TIMESTAMP:
+            return parse_timestamp(value)
+        return value
+
+
+class EverlightsCloudBridgeSensor(EverlightsCloudBridgeEntity, SensorEntity):
+    """A reading about the bridge itself."""
+
+    @property
+    def native_value(self) -> Any:
+        """Return the reading."""
+        value = self.bridge.get(self.entity_description.key)
         if self.entity_description.device_class == SensorDeviceClass.TIMESTAMP:
             return parse_timestamp(value)
         return value

@@ -16,7 +16,13 @@ from .const import DOMAIN
 from .coordinator import EverlightsCloudConfigEntry, EverlightsCloudCoordinator
 from .migration import async_adopt_legacy_entities
 
-PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.CALENDAR,
+    Platform.LIGHT,
+    Platform.SENSOR,
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: EverlightsCloudConfigEntry) -> bool:

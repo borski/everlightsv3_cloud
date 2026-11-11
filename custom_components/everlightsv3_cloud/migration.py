@@ -20,7 +20,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 
 from .const import DOMAIN, LEGACY_DOMAIN, LOGGER
-from .entity import zone_device_info
+from .entity import via_bridge, zone_device_info
 
 
 @callback
@@ -48,7 +48,7 @@ def async_adopt_legacy_entities(
             skipped_loaded.append(legacy.entity_id)
             continue
 
-        info = zone_device_info(zones[serial])
+        info = zone_device_info(hass, entry.entry_id, zones[serial])
         device = device_registry.async_get_or_create(
             config_entry_id=entry.entry_id,
             identifiers=info["identifiers"],
@@ -58,7 +58,7 @@ def async_adopt_legacy_entities(
             sw_version=info["sw_version"],
             hw_version=info["hw_version"],
             # The bridge device is registered before adoption runs.
-            via_device=info["via_device"],
+            **via_bridge(hass, entry.entry_id, zones[serial]["bridgeSerial"]),
         )
         old_device = device_registry.async_get(legacy.device_id) if legacy.device_id else None
         if old_device is not None:
