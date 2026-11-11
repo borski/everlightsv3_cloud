@@ -16,7 +16,7 @@ async def turn_off(hass):
     await hass.services.async_call("light", "turn_off", {"entity_id": ENTITY}, blocking=True)
 
 
-async def test_turn_on_colour(hass, setup_entry, cloud):
+async def test_turn_on_color(hass, setup_entry, cloud):
     await turn_on(hass, hs_color=(0, 100))
     assert cloud.posts == [(GARAGE, {"pattern": ["FF0000"], "effects": []})]
     state = hass.states.get(ENTITY)
@@ -33,29 +33,29 @@ async def test_bare_turn_on_defaults_to_white(hass, setup_entry, cloud):
     assert cloud.posts[-1][1] == {"pattern": ["FFFFFF"], "effects": []}
 
 
-async def test_brightness_scales_colours(hass, setup_entry, cloud):
+async def test_brightness_scales_colors(hass, setup_entry, cloud):
     await turn_on(hass, hs_color=(0, 100), brightness=128)
     assert cloud.posts[-1][1]["pattern"] == ["800000"]
     state = hass.states.get(ENTITY)
     assert state.attributes["brightness"] == 128
     assert state.attributes["hs_color"] == (0.0, 100.0)
-    # Brightness alone keeps the colour.
+    # Brightness alone keeps the color.
     await turn_on(hass, brightness=64)
     assert cloud.posts[-1][1]["pattern"] == ["400000"]
     assert hass.states.get(ENTITY).attributes["hs_color"] == (0.0, 100.0)
 
 
 async def test_effect(hass, setup_entry, cloud):
-    sequence = cloud.library[1]  # Six colours with a chase effect.
+    sequence = cloud.library[1]  # Six colors with a chase effect.
     await turn_on(hass, effect=sequence["alias"])
     assert cloud.posts[-1][1] == {"pattern": sequence["pattern"], "effects": sequence["effects"]}
     assert hass.states.get(ENTITY).attributes["effect"] == sequence["alias"]
-    # Dimming an effect scales every colour and keeps the effect.
+    # Dimming an effect scales every color and keeps the effect.
     await turn_on(hass, brightness=128)
     assert cloud.posts[-1][1]["pattern"][0] == "800000"
     assert cloud.posts[-1][1]["effects"] == sequence["effects"]
     assert hass.states.get(ENTITY).attributes["effect"] == sequence["alias"]
-    # Picking a colour drops the effect.
+    # Picking a color drops the effect.
     await turn_on(hass, hs_color=(120, 100))
     assert cloud.posts[-1][1] == {"pattern": ["008000"], "effects": []}
     assert hass.states.get(ENTITY).attributes["effect"] == "off"
@@ -111,7 +111,7 @@ async def test_rejected_command(hass, setup_entry, cloud):
     assert hass.states.get(ENTITY).state == "off"
 
 
-async def test_change_from_the_app_is_recognised(hass, setup_entry, cloud, freezer):
+async def test_change_from_the_app_is_recognized(hass, setup_entry, cloud, freezer):
     sequence = cloud.library[1]
     cloud.sequences[GARAGE] = {"pattern": [c.lower() for c in sequence["pattern"]],
                                "effects": sequence["effects"]}
@@ -120,7 +120,7 @@ async def test_change_from_the_app_is_recognised(hass, setup_entry, cloud, freez
     assert state.state == "on"
     assert state.attributes["effect"] == sequence["alias"]
     assert state.attributes["brightness"] == 255
-    # A dimmed solid colour that is in no library.
+    # A dimmed solid color that is in no library.
     cloud.sequences[GARAGE] = {"pattern": ["003B80"], "effects": []}
     await poll(hass, freezer)
     state = hass.states.get(ENTITY)

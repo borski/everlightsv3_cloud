@@ -66,7 +66,7 @@ async def async_setup_entry(
         SERVICE_SAVE_SEQUENCE,
         {
             vol.Required("name"): cv.string,
-            vol.Optional("colors"): vol.All(cv.ensure_list, [_hex_colour], vol.Length(min=1)),
+            vol.Optional("colors"): vol.All(cv.ensure_list, [_hex_color], vol.Length(min=1)),
             vol.Optional("effects"): {vol.In(EFFECT_TYPES): vol.All(vol.Coerce(int), vol.Range(0, 255))},
         },
         "async_save_sequence",
@@ -76,7 +76,7 @@ async def async_setup_entry(
         {
             vol.Required("name"): cv.string,
             vol.Optional("new_name"): cv.string,
-            vol.Optional("colors"): vol.All(cv.ensure_list, [_hex_colour], vol.Length(min=1)),
+            vol.Optional("colors"): vol.All(cv.ensure_list, [_hex_color], vol.Length(min=1)),
             vol.Optional("effects"): {vol.In(EFFECT_TYPES): vol.All(vol.Coerce(int), vol.Range(0, 255))},
         },
         "async_update_sequence",
@@ -86,18 +86,18 @@ async def async_setup_entry(
     )
 
 
-def _hex_colour(value: Any) -> str:
+def _hex_color(value: Any) -> str:
     try:
         return rgb_to_hex(hex_to_rgb(str(value)))
     except ValueError as err:
-        raise vol.Invalid(f"{value!r} is not an RRGGBB colour") from err
+        raise vol.Invalid(f"{value!r} is not an RRGGBB color") from err
 
 
 class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
     """One Everlights zone.
 
-    The bridge only understands a list of colours plus effects. There is no
-    brightness, so brightness is done by dimming the colours themselves.
+    The bridge only understands a list of colors plus effects. There is no
+    brightness, so brightness is done by dimming the colors themselves.
     `_base` is the full-brightness pattern the light is showing.
     """
 
@@ -135,7 +135,7 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
 
     @property
     def effect_list(self) -> list[str]:
-        """Sequences stored on the bridge, plus "off" for a plain colour."""
+        """Sequences stored on the bridge, plus "off" for a plain color."""
         return [EFFECT_OFF, *sorted(self._library)]
 
     # -------------------------------------------------------------- state
@@ -152,7 +152,7 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
 
     @callback
     def _sync_from_coordinator(self) -> None:
-        """Work out colour, brightness, and effect from what the bridge reports."""
+        """Work out color, brightness, and effect from what the bridge reports."""
         zone = self.zone
         pattern = normalize_pattern(zone.get("pattern"))
         effects = normalize_effects(zone.get("effects"))
@@ -179,8 +179,8 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
                 return
         peak = pattern_peak(pattern) or 255
         base = [
-            rgb_to_hex(tuple(min(255, round(c * 255 / peak)) for c in hex_to_rgb(colour)))  # type: ignore[arg-type]
-            for colour in pattern
+            rgb_to_hex(tuple(min(255, round(c * 255 / peak)) for c in hex_to_rgb(color)))  # type: ignore[arg-type]
+            for color in pattern
         ]
         self._set_shown(base, effects, None, peak)
 
@@ -202,7 +202,7 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
     # ----------------------------------------------------------- commands
 
     async def async_turn_on(self, **kwargs: Any) -> None:
-        """Turn on, or change colour, brightness, or effect."""
+        """Turn on, or change color, brightness, or effect."""
         effect = kwargs.get(ATTR_EFFECT)
         hs_color = kwargs.get(ATTR_HS_COLOR)
         brightness = kwargs.get(ATTR_BRIGHTNESS)
@@ -225,7 +225,7 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
             effects = normalize_effects(sequence.get("effects"))
             name = effect
         elif hs_color is not None or effect == EFFECT_OFF:
-            # A colour (or effect "off") means a plain solid colour.
+            # A color (or effect "off") means a plain solid color.
             if hs_color is None:
                 hs_color = self._attr_hs_color or (0.0, 0.0)
             base = [rgb_to_hex(color_util.color_hs_to_RGB(*hs_color))]
@@ -256,11 +256,11 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
     async def async_save_sequence(
         self, name: str, colors: list[str] | None = None, effects: dict[str, int] | None = None
     ) -> None:
-        """Save colours as a sequence on the bridge. Defaults to what this light shows now."""
+        """Save colors as a sequence on the bridge. Defaults to what this light shows now."""
         if colors is None:
             if not (self._attr_is_on and self._base):
                 raise ServiceValidationError(
-                    "The light is off. Turn it on or pass colours to save"
+                    "The light is off. Turn it on or pass colors to save"
                 )
             pattern = list(self._base)
             effect_list = self._base_effects if effects is None else None
@@ -277,9 +277,9 @@ class EverlightsCloudLight(EverlightsCloudEntity, LightEntity):
         colors: list[str] | None = None,
         effects: dict[str, int] | None = None,
     ) -> None:
-        """Change the colours, effects, or name of one of your own saved sequences."""
+        """Change the colors, effects, or name of one of your own saved sequences."""
         if new_name is None and colors is None and effects is None:
-            raise ServiceValidationError("Nothing to change. Pass a new name, colours, or effects")
+            raise ServiceValidationError("Nothing to change. Pass a new name, colors, or effects")
         effect_list = (
             None if effects is None else [{"effectType": k, "value": v} for k, v in effects.items()]
         )

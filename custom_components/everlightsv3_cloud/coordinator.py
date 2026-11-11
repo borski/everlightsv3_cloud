@@ -166,7 +166,7 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except EverlightsCloudAuthenticationError:
             raise
         except EverlightsCloudError as err:
-            # Effects are optional. Plain colours still work without them.
+            # Effects are optional. Plain colors still work without them.
             LOGGER.warning("Could not load the Everlights sequence library: %s", err)
 
     async def _async_maybe_load_events(self, bridge: str, now: datetime) -> None:
@@ -316,7 +316,7 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         name = name.strip()
         pattern, effects = normalize_pattern(pattern), normalize_effects(effects)
         if not name or not pattern:
-            raise ServiceValidationError("A sequence needs a name and at least one colour")
+            raise ServiceValidationError("A sequence needs a name and at least one color")
         await self._async_reload_sequences(bridge)
         if any(s.get("alias", "").casefold() == name.casefold() for s in self.sequences):
             raise ServiceValidationError(f"A sequence named '{name}' already exists")
@@ -368,7 +368,7 @@ class EverlightsCloudCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if pattern is not None:
             changed["pattern"] = normalize_pattern(pattern)
             if not changed["pattern"]:
-                raise ServiceValidationError("A sequence needs at least one colour")
+                raise ServiceValidationError("A sequence needs at least one color")
         if effects is not None:
             changed["effects"] = normalize_effects(effects)
         if new_name and new_name.strip().casefold() != name.strip().casefold():

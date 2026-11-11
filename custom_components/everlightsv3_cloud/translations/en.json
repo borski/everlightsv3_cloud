@@ -35,15 +35,15 @@
     },
     "save_sequence": {
       "name": "Save sequence",
-      "description": "Saves colours and effects as a sequence on the bridge. It shows up as an effect and in the EverLights app under Personal.",
+      "description": "Saves colors and effects as a sequence on the bridge. It shows up as an effect and in the EverLights app under Personal.",
       "fields": {
         "name": {
           "name": "Name",
           "description": "Name for the new sequence. It must not match an existing one."
         },
         "colors": {
-          "name": "Colours",
-          "description": "List of RRGGBB colours. Leave empty to save what the light is showing now."
+          "name": "Colors",
+          "description": "List of RRGGBB colors. Leave empty to save what the light is showing now."
         },
         "effects": {
           "name": "Effects",
@@ -63,7 +63,7 @@
     },
     "update_sequence": {
       "name": "Update sequence",
-      "description": "Changes the colours, effects, or name of one of your own saved sequences. Built-in sequences can't be changed.",
+      "description": "Changes the colors, effects, or name of one of your own saved sequences. Built-in sequences can't be changed.",
       "fields": {
         "name": {
           "name": "Name",
@@ -74,8 +74,8 @@
           "description": "Rename the sequence. Leave empty to keep its name."
         },
         "colors": {
-          "name": "Colours",
-          "description": "List of RRGGBB colours that replaces the current ones. Leave empty to keep them."
+          "name": "Colors",
+          "description": "List of RRGGBB colors that replaces the current ones. Leave empty to keep them."
         },
         "effects": {
           "name": "Effects",

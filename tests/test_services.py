@@ -12,7 +12,7 @@ from .test_init import poll
 
 LIGHT = "light.garage_everlights"
 CALENDAR = "calendar.everlights_bridge_schedule"
-OWN = "Sequence 098"  # Personal, two colours, no effects.
+OWN = "Sequence 098"  # Personal, two colors, no effects.
 BUILT_IN = "Sequence 001"
 
 
@@ -50,7 +50,7 @@ async def test_clear_without_answer_is_not_replayed(hass, setup_entry, cloud):
 
 # ---------------------------------------------------------------- library
 
-async def test_save_explicit_colours(hass, setup_entry, cloud):
+async def test_save_explicit_colors(hass, setup_entry, cloud):
     await call(hass, "save_sequence", name="Candy", colors=["ff0000", "#FFFFFF"], effects={"chase": 100})
     saved = cloud.library[-1]
     assert saved["alias"] == "Candy" and saved["groups"] == ["Personal/"]

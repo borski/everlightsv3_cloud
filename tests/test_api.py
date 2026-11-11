@@ -1,4 +1,4 @@
-"""Client behaviour: auth lifecycle, retries, and the never-replay-writes rule."""
+"""Client behavior: auth lifecycle, retries, and the never-replay-writes rule."""
 import pytest
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 

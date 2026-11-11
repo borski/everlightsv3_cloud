@@ -1,4 +1,4 @@
-"""Pattern maths: brightness is done by scaling colours."""
+"""Pattern maths: brightness is done by scaling colors."""
 import pytest
 
 from custom_components.everlightsv3_cloud.patterns import (

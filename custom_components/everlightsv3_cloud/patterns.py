@@ -1,7 +1,7 @@
 """Pure helpers for Everlights patterns (lists of RRGGBB hex strings).
 
 The bridge has no brightness control, so brightness is done by scaling every
-colour in a pattern. These helpers scale patterns and recognise them again
+color in a pattern. These helpers scale patterns and recognize them again
 when they are read back from the bridge.
 """
 from __future__ import annotations
@@ -15,7 +15,7 @@ def hex_to_rgb(value: str) -> RGB:
     """Parse RRGGBB (optionally prefixed with #) into an RGB tuple."""
     value = value.strip().lstrip("#")
     if len(value) != 6:
-        raise ValueError(f"Not an RRGGBB colour: {value!r}")
+        raise ValueError(f"Not an RRGGBB color: {value!r}")
     return int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16)
 
 
@@ -25,7 +25,7 @@ def rgb_to_hex(rgb: RGB) -> str:
 
 
 def normalize_pattern(pattern: Any) -> list[str]:
-    """Upper-case a pattern and drop anything that is not a colour."""
+    """Upper-case a pattern and drop anything that is not a color."""
     out: list[str] = []
     for item in pattern or []:
         try:
@@ -59,15 +59,15 @@ def pattern_peak(pattern: list[str]) -> int:
 
 
 def scale_pattern(pattern: list[str], brightness: int) -> list[str]:
-    """Scale every colour by brightness/255. Lit channels never round to zero."""
+    """Scale every color by brightness/255. Lit channels never round to zero."""
     brightness = max(1, min(255, int(brightness)))
     if brightness == 255:
         return normalize_pattern(pattern)
     out = []
-    for colour in normalize_pattern(pattern):
+    for color in normalize_pattern(pattern):
         out.append(
             rgb_to_hex(
-                tuple(max(1, round(c * brightness / 255)) if c else 0 for c in hex_to_rgb(colour))  # type: ignore[arg-type]
+                tuple(max(1, round(c * brightness / 255)) if c else 0 for c in hex_to_rgb(color))  # type: ignore[arg-type]
             )
         )
     return out

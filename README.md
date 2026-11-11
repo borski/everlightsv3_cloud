@@ -1,5 +1,12 @@
 # Everlights v3 Cloud for Home Assistant
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/everlights-cloud-dark.png">
+    <img src="assets/everlights-cloud-light.png" alt="Everlights v3 Cloud" width="340">
+  </picture>
+</p>
+
 Control EverLights v3 permanent lights from Home Assistant through the EverLights cloud.
 
 Bridge firmware B5010 turned off the local API. Local requests now come back as HTTP 410, so integrations that talk to the bridge directly stopped working. This one signs in with your EverLights app account and reaches the bridge the same way the app does.
@@ -8,7 +15,7 @@ Bridge firmware B5010 turned off the local API. Local requests now come back as 
 
 ## What you get
 
-- One light per zone with on, off, colour, and brightness.
+- One light per zone with on, off, color, and brightness.
 - Every sequence saved on your bridge as a light effect.
 - Changes made in the EverLights app show up in Home Assistant within a minute.
 - A calendar per bridge with the shows scheduled on it, one entry per night.
@@ -18,7 +25,7 @@ Bridge firmware B5010 turned off the local API. Local requests now come back as 
 - A reauth prompt when your password changes.
 - Downloadable diagnostics with serials, addresses, and names redacted.
 
-Brightness works by scaling the colours in the pattern, since the bridge has no brightness setting of its own.
+Brightness works by scaling the colors in the pattern, since the bridge has no brightness setting of its own.
 
 ## Install
 
@@ -51,8 +58,8 @@ Light actions. Target any Everlights light.
 | Action | What it does |
 |---|---|
 | `everlightsv3_cloud.clear` | Drops what Home Assistant sent and hands the zone back to the bridge's schedule. With nothing scheduled, the lights go off. |
-| `everlightsv3_cloud.save_sequence` | Saves colours and effects as a new sequence. With no colours given, it saves what the light is showing at full brightness. |
-| `everlightsv3_cloud.update_sequence` | Changes the colours, effects, or name of one of your own sequences. |
+| `everlightsv3_cloud.save_sequence` | Saves colors and effects as a new sequence. With no colors given, it saves what the light is showing at full brightness. |
+| `everlightsv3_cloud.update_sequence` | Changes the colors, effects, or name of one of your own sequences. |
 | `everlightsv3_cloud.delete_sequence` | Deletes one of your own sequences. |
 
 Calendar actions. Target the bridge's schedule calendar.
@@ -112,7 +119,7 @@ These start disabled. Enable the ones you want.
 
 - It needs the internet and the EverLights cloud. There is no local fallback on B5010.
 - Zones paired to your account but attached to someone else's bridge are skipped.
-- It doesn't pair or unpair bridges and zones, rename them, or change strip length and colour order. Use the app for those.
+- It doesn't pair or unpair bridges and zones, rename them, or change strip length and color order. Use the app for those.
 - New shows come from the `schedule_show` action. The calendar's own add dialog has no fields for sequences or zones.
 - If two saved sequences share a name, the effect list shows the name once.
 
@@ -123,10 +130,10 @@ Tested on bridge hardware BH300 with firmware B5010 and zone firmware N3063.
 | Feature | Status |
 |---|---|
 | Reading zones, sequences, schedule, and clock | Tested |
-| Solid colour, off, and clear | Tested |
+| Solid color, off, and clear | Tested |
 | Saving, updating, and deleting a sequence | Tested |
 | Scheduling, changing, and deleting a show | Tested |
-| A show on one zone firing on time, cycling a chase effect and a solid colour, and ending | Tested |
+| A show on one zone firing on time, cycling a chase effect and a solid color, and ending | Tested |
 | Sync clock and restart | Tested |
 | Effects sent straight to a light with `light.turn_on` | Same pattern format the show test used. Not tried on its own |
 | Start at dusk and end at dawn | The bridge stores the flags. Their timing is not yet tested |
@@ -144,7 +151,7 @@ The fixtures in `tests/fixtures` are captures from a real bridge with serials, n
 
 ## Credits
 
-Thanks to [theOrakle](https://github.com/theOrakle/everlightsv3) for the original local integration. This project keeps its entity ID format so the move is painless.
+Thanks to [theOrakle](https://github.com/theOrakle/everlightsv3) for the original local integration. This project keeps its entity ID format so the move is painless. The banner is adapted from that project's artwork.
 
 This project isn't affiliated with or endorsed by EverLights. It uses the same cloud service as the official app and could break if that service changes.
 
